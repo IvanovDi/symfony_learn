@@ -1,0 +1,4 @@
+warehouse:
+    resource: "@WarehouseBundle/Resources/config/routing.yml"
+    prefix:   /
+

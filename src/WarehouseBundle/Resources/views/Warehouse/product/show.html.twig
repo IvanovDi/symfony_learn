@@ -1,0 +1,12 @@
+{% extends '::base.html.twig' %}
+
+{% block title %} Show Product {% endblock %}
+
+{% block body %}
+
+    <h2>Product - {{ product.title }}</h2>
+    <p>{{ product.description }}</p>
+
+    <br>
+    <p><a href="{{ path('warehouse_homepage') }}">return</a></p>
+{% endblock %}

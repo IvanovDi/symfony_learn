@@ -1,0 +1,42 @@
+warehouse_homepage:
+    path:     /
+    defaults: { _controller: WarehouseBundle:Category:index }
+
+create_category:
+    path: /category/create
+    defaults: { _controller: WarehouseBundle:Category:create }
+
+update_category:
+    path: /category/update/{category}
+    defaults: { _controller: WarehouseBundle:Category:update }
+
+delete_category:
+    path: /category/delete/{category}
+    defaults: { _controller: WarehouseBundle:Category:delete }
+
+show__category:
+    path: /category/show/{category}
+    defaults: { _controller: WarehouseBundle:Category:show }
+
+show_products_in_category:
+    path: /category/products/{category}
+    defaults: { _controller: WarehouseBundle:Category:showProductsInCategory }
+
+
+
+
+create_product:
+    path: /product/create
+    defaults: { _controller: WarehouseBundle:Product:create }
+
+show_product:
+    path: /product/show/{product}
+    defaults: { _controller: WarehouseBundle:Product:show }
+
+update_product:
+    path: /product/update/{product}
+    defaults: { _controller: WarehouseBundle:Product:update }
+
+delete_product:
+    path: /product/delete/{product}
+    defaults: { _controller: WarehouseBundle:Product:delete }

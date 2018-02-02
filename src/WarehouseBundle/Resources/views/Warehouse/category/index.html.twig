@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Category {% endblock %}
+
+{% block body %}
+    {% block nav %}
+        <div>
+            <a href="{{ path('create_category') }}">Add Category</a>
+            <a href="{{ path('create_product') }}">Add Product</a>
+        </div>
+    {% endblock %}
+    <div class="container">
+        <div class="row">
+
+        <h1>Category</h1>
+
+            {% for item in category %}
+                <p>
+                    <a href="{{ path('show_products_in_category', {'category': item.id}) }}">
+                        {{ item.title }}
+                    </a>
+                    <span style="padding-left: 50px  ">
+                        <a href="{{ path('show__category', { 'category': item.id }) }}">Deetail</a>
+                        <a href="{{ path('update_category', { 'category': item.id }) }}">Edit</a>
+                        <a href="{{ path('delete_category', { 'category': item.id }) }}">Delete</a>
+                    </span>
+                </p>
+            {% endfor %}
+        </div>
+    </div>
+
+
+{#<a href="{{ path('show_product', {'key':item}) }}">#}
+
+{% endblock %}

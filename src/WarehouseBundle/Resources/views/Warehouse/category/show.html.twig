@@ -1,0 +1,12 @@
+{% extends '::base.html.twig' %}
+
+{% block title %} Show Category {% endblock %}
+
+{% block body %}
+
+    <h2>Category - {{ category.title }}</h2>
+    <p>{{ category.description }}</p>
+
+    <br>
+    <p><a href="{{ path('warehouse_homepage') }}">return</a></p>
+{% endblock %}
