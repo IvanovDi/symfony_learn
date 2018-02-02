@@ -100,10 +100,17 @@ class CategoryController extends Controller
 
         $form->handleRequest($request);
 
-            dump(count($category->getProducts()));exit;
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($category);
-            $em->flush();
+            if(count($category->getProducts()) > 0) {
+
+                $this->addFlash('notice', 'while there are products in the category you delete a category, it is impossible!');
+
+            } else {
+
+                $em = $this->getDoctrine()->getManager();
+                $em->remove($category);
+                $em->flush();
+            }
+
 
         return $this->redirectToRoute('warehouse_homepage');
 
