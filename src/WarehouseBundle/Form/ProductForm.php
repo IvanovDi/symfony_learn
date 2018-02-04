@@ -23,8 +23,8 @@ class ProductForm extends AbstractType
                 'class' => 'WarehouseBundle\Entity\Category',
                 'choice_label' => 'title',
             ])
-            ->add('created', DateType::class, array('widget' => 'single_text'))
-            ->add('updated', DateType::class, array('widget' => 'single_text'))
+//            ->add('created', DateType::class, array('widget' => 'single_text'))
+//            ->add('updated', DateType::class, array('widget' => 'single_text'))
         ;
     }
 

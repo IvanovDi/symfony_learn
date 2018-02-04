@@ -16,8 +16,8 @@ class CategoryForm extends AbstractType
         $builder
             ->add('title', TextType::class)
             ->add('description', TextType::class)
-            ->add('created', DateType::class, array('widget' => 'single_text'))
-            ->add('updated', DateType::class, array('widget' => 'single_text'))
+//            ->add('created', DateType::class, array('widget' => 'single_text'))
+//            ->add('updated', DateType::class, array('widget' => 'single_text'))
         ;
     }
 
