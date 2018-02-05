@@ -30,7 +30,7 @@ class RegistrationController extends Controller
             $em->persist($user);
             $em->flush();
 
-            return $this->redirectToRoute('warehouse_welcome_page');
+            return $this->redirectToRoute('login');
         }
 
         return $this->render(
