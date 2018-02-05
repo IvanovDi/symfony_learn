@@ -1,0 +1,18 @@
+{% extends '::base.html.twig' %}
+
+
+
+{% block title %} Registration {% endblock %}
+
+{% block body %}
+
+    <h1>Registration</h1>
+    {{ form_start(form) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.plainPassword.first) }}
+    {{ form_row(form.plainPassword.second) }}
+    <input type="hidden" name="_target_path" value="{{ path('warehouse_homepage') }}" />
+    <button type="submit">Register!</button>
+    {{ form_end(form) }}
+{% endblock %}

@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Product
 {
     /**
-     * @ORM\ManyToOne(targetEntity="WarehouseBundle\Entity\Category", inversedBy="product")
+     * @ORM\ManyToOne(targetEntity="WarehouseBundle\Entity\Category", inversedBy="products")
      */
     private $category;
 

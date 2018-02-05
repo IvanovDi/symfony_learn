@@ -1,0 +1,18 @@
+{% extends '::base.html.twig' %}
+
+
+
+{% block title %} Welcome {% endblock %}
+
+{% block body %}
+
+    <h1>Welcome in Warehouse</h1>
+
+    <div>
+        <a style="padding-left: 20px" href="{{ path('login') }}">Sign in</a>
+
+        <a style="padding-left: 40px" href="{{ path('user_registration') }}">Sign up</a>
+    </div>
+
+
+{% endblock %}

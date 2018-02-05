@@ -1,5 +1,23 @@
+warehouse_welcome_page:
+    path: /
+    defaults: { _controller: WarehouseBundle:Registration:index }
+
+login:
+    path: /login
+    defaults: { _controller: WarehouseBundle:Security:login}
+
+user_registration:
+    path:     /register
+    defaults: { _controller: WarehouseBundle:Registration:register }
+
+logout:
+    path: /logout
+
+
+
+
 warehouse_homepage:
-    path:     /
+    path:     /home
     defaults: { _controller: WarehouseBundle:Category:index }
 
 create_category:
@@ -40,3 +58,4 @@ update_product:
 delete_product:
     path: /product/delete/{product}
     defaults: { _controller: WarehouseBundle:Product:delete }
+
