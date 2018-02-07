@@ -7,7 +7,7 @@ security:
 
     # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
-        our_db_provider:
+        user_provider:
             entity:
                 class: WarehouseBundle:User
                 property: name
@@ -23,11 +23,12 @@ security:
             security: false
 
         main:
+            anonymous: ~
             form_login:
                 login_path: login
                 check_path: login
                 csrf_token_generator: security.csrf.token_manager
-            provider: our_db_provider
+            provider: user_provider
 
             logout:
                 path:   /logout
