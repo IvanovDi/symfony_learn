@@ -66,7 +66,6 @@ class CategoryControllerTest extends WebTestCase
 
         $this->assertContains('/home', $crawler->text());
 
-        return $crawler;
     }
 
     public function testLoginForBadDate()
@@ -136,11 +135,49 @@ class CategoryControllerTest extends WebTestCase
         $client->click($link);
 
         $crawler = $client->request('GET', '/home');
-        file_put_contents('/home/dmitrovskiy/Documents/file.txt', print_r($crawler->text(), true));
 
 
         $this->assertContains('/login', $crawler->text());
 
+    }
+
+    public function testAddCategory()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', '/login');
+
+
+        $form = $crawler->selectButton('submit-login')->form();
+
+
+        $form['_username'] = 'dima';
+        $form['_password'] = '111';
+
+        $crawler = $client->submit($form);
+
+        $crawler = $client->request('GET', '/home');
+
+        $count_category_before = $crawler->filter('.category-list > a')->count();
+
+        $link = $crawler->selectLink('Add Category')->link();
+
+
+        $crawler = $client->click($link);
+
+        $form = $crawler->selectButton('Create')->form();
+
+        $form['category_form[title]'] = 'test_category';
+        $form['category_form[description]'] = 'test desc category';
+
+        $crawler = $client->submit($form);
+
+        $crawler = $client->request('GET', '/home');
+        $count_category_after = $crawler->filter('.category-list > a')->count();
+
+        file_put_contents('/home/dima/Documents/file.txt', print_r([$count_category_before, $count_category_after], true));
+
+        $this->assertTrue($count_category_before < $count_category_after);
     }
 
 }
