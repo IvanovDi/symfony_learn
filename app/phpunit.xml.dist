@@ -9,9 +9,8 @@
 >
     <php>
         <ini name="error_reporting" value="-1" />
-        <!--
-            <server name="KERNEL_DIR" value="/path/to/your/app/" />
-        -->
+        <server name="KERNEL_DIR" value="/home/dmitrovskiy/Documents/symfony_learn/app" />
+        <env name="KERNEL_CLASS" value="App\Kernel" />
     </php>
 
     <testsuites>

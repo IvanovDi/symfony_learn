@@ -21,7 +21,7 @@
         <h1>Category</h1>
 
             {% for item in category %}
-                <p>
+                <p class="category-list">
                     <a href="{{ path('show_products_in_category', {'category': item.id}) }}">
                         {{ item.title }}
                     </a>

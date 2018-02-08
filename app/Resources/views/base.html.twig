@@ -8,7 +8,7 @@
     </head>
     <body>
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-        <p>Username: {{ app.user.username }} <a href="{{ path('logout') }}">Sign out</a></p>
+        <p>Username: {{ app.user.username }} <a id="sign_out" href="{{ path('logout') }}">Sign out</a></p>
     {% endif %}
         {% block body %}{% endblock %}
         {% block javascripts %}{% endblock %}

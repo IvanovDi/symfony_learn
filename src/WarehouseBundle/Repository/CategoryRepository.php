@@ -18,7 +18,7 @@ class CategoryRepository extends EntityRepository
 
         $qb->select('c')
             ->from('WarehouseBundle:Category', 'c')
-            ->orderBy('c.title', 'ASC');
+            ->orderBy('c.id', 'ASC');
 
         $query = $qb->getQuery();
 
