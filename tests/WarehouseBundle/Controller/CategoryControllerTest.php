@@ -129,12 +129,17 @@ class CategoryControllerTest extends WebTestCase
 
         $crawler = $client->request('GET', '/home');
 
-        $link = $crawler->filter('#sign_out')->link()->getUri();
+        $link = $crawler->filter('#sign_out')->link();
 
 
 
-//        $crawler = $client->click($link);
-        file_put_contents('/home/dmitrovskiy/Documents/file.txt', print_r($link, true));
+        $client->click($link);
+
+        $crawler = $client->request('GET', '/home');
+        file_put_contents('/home/dmitrovskiy/Documents/file.txt', print_r($crawler->text(), true));
+
+
+        $this->assertContains('/login', $crawler->text());
 
     }
 
