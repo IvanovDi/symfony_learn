@@ -8,9 +8,11 @@
 
     {% for item in products %}
         <p>
-            <a href="{{ path('show_product', {'product': item.id}) }}">
-                {{ item.title }}
-            </a>
+            <span class="product-list">
+                <a href="{{ path('show_product', {'product': item.id}) }}">
+                    {{ item.title }}
+                </a>
+            </span>
             <span style="padding-left: 50px  ">
                 <a href="{{ path('show_product', {'product': item.id}) }}">Deetail</a>
                 <a href="{{ path('update_product', {'product': item.id}) }}">Edit</a>

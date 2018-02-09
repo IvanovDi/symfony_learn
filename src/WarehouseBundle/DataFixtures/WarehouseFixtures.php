@@ -27,7 +27,7 @@ class WarehouseFixtures extends Fixture
             $product = new Product();
             $product->setTitle('product_' . $i);
             $product->setDescription('desc_' . $i);
-            $product->setCategory($manager->getRepository('WarehouseBundle:Category')->findOneByTitle('category_' . rand(0, 20)));
+            $product->setCategory($manager->getRepository('WarehouseBundle:Category')->findOneByTitle('category_' . rand(2, 20)));
             $manager->persist($product);
         }
 
