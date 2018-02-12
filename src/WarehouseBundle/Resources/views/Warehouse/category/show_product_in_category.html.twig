@@ -13,8 +13,8 @@
                     {{ item.title }}
                 </a>
             </span>
-            <span style="padding-left: 50px  ">
-                <a href="{{ path('show_product', {'product': item.id}) }}">Deetail</a>
+            <span style="padding-left: 50px  " class="product-list-actions">
+                <a href="{{ path('show_product', {'product': item.id}) }}">Detail</a>
                 <a href="{{ path('update_product', {'product': item.id}) }}">Edit</a>
                 <a href="{{ path('delete_product', { 'product': item.id }) }}">Delete</a>
             </span>

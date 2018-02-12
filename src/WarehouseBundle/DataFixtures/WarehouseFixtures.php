@@ -24,12 +24,20 @@ class WarehouseFixtures extends Fixture
         $manager->flush();
 
         for($i = 0; $i < 20; $i++) {
+            if($i == 1) {continue;}
             $product = new Product();
             $product->setTitle('product_' . $i);
             $product->setDescription('desc_' . $i);
-            $product->setCategory($manager->getRepository('WarehouseBundle:Category')->findOneByTitle('category_' . rand(2, 20)));
+            $product->setCategory($manager->getRepository('WarehouseBundle:Category')->findOneByTitle('category_' . rand(2, 18)));
             $manager->persist($product);
         }
+
+        $product = new Product();
+        $product->setTitle('product_test');
+        $product->setDescription('desc_test');
+        $product->setCategory($manager->getRepository('WarehouseBundle:Category')->findOneByTitle('category_1'));
+        $manager->persist($product);
+
 
 
         $user = new User();
