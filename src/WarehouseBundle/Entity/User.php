@@ -36,7 +36,7 @@ class User implements UserInterface, \Serializable
      *
      * @ORM\Column(type="string", length=50, unique=true)
      */
-    private $name;
+    private $username;
 
     /**
      * @var string
@@ -59,9 +59,30 @@ class User implements UserInterface, \Serializable
      */
     private $isActive;
 
+    /**
+     * @ORM\Column(type="string", length=32)
+     */
+    private $apiKey;
+
     public function __construct()
     {
         $this->isActive = true;
+    }
+
+    /**
+     * @param mixed $apiKey
+     */
+    public function setApiKey($apiKey)
+    {
+        $this->apiKey = $apiKey;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getApiKey()
+    {
+        return $this->apiKey;
     }
 
     public function getRoles()
@@ -74,7 +95,7 @@ class User implements UserInterface, \Serializable
     {
         return serialize([
             $this->id,
-            $this->name,
+            $this->username,
             $this->password,
         ]);
     }
@@ -84,7 +105,7 @@ class User implements UserInterface, \Serializable
     {
         list (
             $this->id,
-            $this->name,
+            $this->username,
             $this->password,
             ) = unserialize($serialized);
     }
@@ -93,10 +114,6 @@ class User implements UserInterface, \Serializable
     {
     }
 
-    public function getUsername()
-    {
-        return $this->getName();
-    }
 
     public function getSalt()
     {
@@ -122,24 +139,24 @@ class User implements UserInterface, \Serializable
     /**
      * Set name
      *
-     * @param string $name
+     * @param string $username
      * @return User
      */
-    public function setName($name)
+    public function setUsername($username)
     {
-        $this->name = $name;
+        $this->username = $username;
 
         return $this;
     }
 
     /**
-     * Get name
+     * Get $username
      *
      * @return string 
      */
-    public function getName()
+    public function getUsername()
     {
-        return $this->name;
+        return $this->username;
     }
 
     /**

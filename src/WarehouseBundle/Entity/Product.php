@@ -167,12 +167,12 @@ class Product
     /**
      * Set updated
      *
-     * @param \DateTime $updated
      * @return Product
+     * @ORM\PreUpdate()
      */
-    public function setUpdated($updated)
+    public function setUpdated()
     {
-        $this->updated = $updated;
+        $this->updated = new \DateTime();
 
         return $this;
     }

@@ -12,3 +12,4 @@
 /composer.phar
 /.idea/
 phpunit.xml
+app/DoctrineMigrations

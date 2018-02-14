@@ -8,19 +8,59 @@ security:
     # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
         user_provider:
-            entity:
-                class: WarehouseBundle:User
-                property: name
+            id: platform.user.provider
+#            entity:
+#                class: WarehouseBundle:User
+#                property: username
     access_control:
             - { path: ^/home, roles: ROLE_USER }
             - { path: ^/category, roles: ROLE_USER }
             - { path: ^/product, roles: ROLE_USER }
             - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+            - { path: ^/api, roles: [ IS_AUTHENTICATED_FULLY ] }
+            - { path: ^/demo/secured/hello/admin/, roles: ROLE_ADMIN }
+
+    role_hierarchy:
+        ROLE_ADMIN:       ROLE_USER
+        ROLE_SUPER_ADMIN: ROLE_ADMIN
 
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
+        login:
+            pattern:  ^/demo/secured/login$
+            security: false
+        oauth_token:
+            pattern:    ^/oauth/v2/token
+            security:   false
+
+#        secured_area:
+#            pattern:    ^/demo/secured/
+#            form_login:
+#                provider: user_provider
+#                check_path: _security_check
+#                login_path: _demo_login
+#            logout:
+#                path:   _demo_logout
+#                target: _demo
+            #anonymous: ~
+            #http_basic:
+            #    realm: "Secured Demo Area"
+
+        oauth_authorize:
+            pattern:    ^/oauth/v2/auth`
+            form_login:
+                provider: user_provider
+                check_path: _security_check
+                login_path: _demo_login
+            anonymous: true
+
+        api:
+            pattern:    ^/api
+            fos_oauth:  true
+            stateless:  true
 
         main:
             anonymous: ~

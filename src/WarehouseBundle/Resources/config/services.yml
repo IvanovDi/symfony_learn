@@ -1,7 +1,0 @@
-services:
-    category_repository:
-        class:  WarehouseBundle\Repository\CategoryRepository
-        arguments: []
-    product_repository:
-        class: WarehouseBundle\Repository\ProductRepository
-        arguments: []

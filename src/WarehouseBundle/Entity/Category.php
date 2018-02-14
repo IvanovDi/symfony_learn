@@ -137,12 +137,12 @@ class Category
     /**
      * Set updated
      *
-     * @param \DateTime $updated
      * @return Category
+     * @ORM\PreUpdate()
      */
-    public function setUpdated($updated)
+    public function setUpdated()
     {
-        $this->updated = $updated;
+        $this->updated = new \DateTime();
 
         return $this;
     }

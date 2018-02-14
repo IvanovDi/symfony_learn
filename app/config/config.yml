@@ -71,3 +71,18 @@ doctrine_migrations:
     table_name: migration_versions
     name: Application Migrations
     organize_migrations: false
+
+fos_rest:
+    routing_loader:
+        default_format: json
+
+fos_oauth_server:
+    db_driver: orm
+    client_class:        WarehouseBundle\Entity\Client
+    access_token_class:  WarehouseBundle\Entity\AccessToken
+    refresh_token_class: WarehouseBundle\Entity\RefreshToken
+    auth_code_class:     WarehouseBundle\Entity\AuthCode
+    service:
+        user_provider: platform.user.provider
+        options:
+            supported_scopes: user

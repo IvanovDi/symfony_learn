@@ -1,9 +1,33 @@
-# Learn more about services, parameters and containers at
-# https://symfony.com/doc/current/service_container.html
 parameters:
-    #parameter_name: value
+    platform.entity.user.class: WarehouseBundle\Entity\User
+    platform.user.provider.class: WarehouseBundle\Provider\UserProvider
+    platform.user.repository.class: WarehouseBundle\Repository\UserRepository
+
+
+
 
 services:
-    #service_name:
-    #    class: AppBundle\Directory\ClassName
-    #    arguments: ['@another_service_name', 'plain_value', '%parameter_name%']
+    category_repository:
+        class:  WarehouseBundle\Repository\CategoryRepository
+        arguments: []
+    product_repository:
+        class: WarehouseBundle\Repository\ProductRepository
+        arguments: []
+    platform.user.manager:
+        class: Doctrine\ORM\EntityManager
+        factory: doctrine:getManagerForClass
+        arguments: ['%platform.entity.user.class%']
+    platform.user.repository:
+        class: WarehouseBundle\Repository\UserRepository
+        factory: platform.user.manager:getRepository
+        arguments: ['%platform.entity.user.class%']
+    platform.user.provider:
+        class: WarehouseBundle\Provider\UserProvider
+        arguments: ['@platform.user.repository']
+    platform.grant_type.api_key:
+        class: WarehouseBundle\OAuth\ApiKeyGrantExtension
+        arguments: ['@platform.user.repository']
+        tags:
+            - { name: fos_oauth_server.grant_extension, uri: http://127.0.0.1:8000/grants/api_key }
+
+

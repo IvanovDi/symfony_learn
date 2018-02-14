@@ -75,8 +75,6 @@ class CategoryController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $form->getData()->setUpdated(new \DateTime());
-
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('warehouse_homepage');
