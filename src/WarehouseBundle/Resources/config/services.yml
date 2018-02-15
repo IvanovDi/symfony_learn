@@ -1,0 +1,3 @@
+services:
+    warehouse.service.inflector:
+        class: WarehouseBundle\Services\NoopInflector

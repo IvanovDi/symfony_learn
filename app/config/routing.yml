@@ -2,13 +2,13 @@ warehouse:
     resource: "@WarehouseBundle/Resources/config/routing.yml"
     prefix:   /
 
-api:
-    type:     rest
-    resource: "@WarehouseBundle/Controller/ApiController.php"
+#api:
+#    type:     rest
+#    resource: "@WarehouseBundle/Controller/ApiController.php"
 
 api.category:
     type: rest
-    resource: "@WarehouseBundle/Api/Controller/CategoryController.php"
+    resource: "@WarehouseBundle/Controller/ApiCategoryController.php"
 
 fos_oauth_server_token:
         resource: "@FOSOAuthServerBundle/Resources/config/routing/token.xml"

@@ -3,6 +3,8 @@
 namespace WarehouseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 /**
  * Category
@@ -164,6 +166,12 @@ class Category
         $this->products = new \Doctrine\Common\Collections\ArrayCollection();
         $this->created = new \DateTime();
         $this->updated = new \DateTime();
+    }
+
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
+    {
+        $metadata->addPropertyConstraint('title', new NotBlank());
+        $metadata->addPropertyConstraint('description', new NotBlank());
     }
 
     /**

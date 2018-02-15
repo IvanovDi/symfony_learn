@@ -41,9 +41,10 @@ class WarehouseFixtures extends Fixture
 
 
         $user = new User();
-        $user->setName('dima');
+        $user->setUsername('dima');
         $user->setEmail('dima@gmail.com');
         $user->setPassword('$2y$13$FXmjRVAOgOoQzpCT8c.zCuXU3ZqsHXHMMmx4cOEmXsI63p.X9ncWS');
+        $user->setApiKey('@apikey@');
         $manager->persist($user);
 
 
