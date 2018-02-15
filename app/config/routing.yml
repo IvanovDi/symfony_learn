@@ -7,6 +7,7 @@ warehouse:
 #    resource: "@WarehouseBundle/Controller/ApiController.php"
 
 api.category:
+    prefix: /api
     type: rest
     resource: "@WarehouseBundle/Controller/ApiCategoryController.php"
 

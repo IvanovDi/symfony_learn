@@ -13,9 +13,6 @@ use WarehouseBundle\Entity\Category;
 use WarehouseBundle\Form\CategoryForm;
 
 
-/**
- * @Rest\RouteResource("Api")
- */
 
 class ApiCategoryController extends FOSRestController
 {
@@ -54,11 +51,15 @@ class ApiCategoryController extends FOSRestController
     public function postCategoryAction(Request $request)
     {
 
-        $form = $this->createForm(CategoryForm::class, new Category(), ['csrf_protection' => false]);
+        $form = $this->createForm(CategoryForm::class, new Category(), ['csrf_protection' => false, 'method' => $request->getMethod()]);
 
         $data = json_decode($request->getContent(), true);
         $form->submit($data);
-        if ($form->isSubmitted() && $form->isValid()) {
+
+        $validator = $this->get('validator');
+        $errors = $validator->validate($form->getData());
+
+        if (!$errors && $form->isValid()) {
             $category = $form->getData();
 
             $em = $this->getDoctrine()->getManager();
@@ -71,22 +72,27 @@ class ApiCategoryController extends FOSRestController
             $response->setStatusCode(200);
 
             return $response;
+
+        } else {
+
+            $response = new Response();
+            $response->setStatusCode(400);
+            $response->setContent($errors);
+
+            return $response;
+
         }
 
+    }
+
+    public function putCategoryAction($category, Request $request)
+    {
+        $category = $this->getDoctrine()->getRepository('WarehouseBundle:Category')->find($category);
+
+
         $response = new Response();
-        $response->setStatusCode(400);
+        $response->setStatusCode(200);
 
         return $response;
     }
-
-//    public function putCategoryAction($category, Request $request)
-//    {
-//        $category = $this->getDoctrine()->getRepository('WarehouseBundle:Category')->find($category);
-//
-//
-//        $response = new Response();
-//        $response->setStatusCode(200);
-//
-//        return $response;
-//    }
 }
