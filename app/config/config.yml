@@ -73,6 +73,8 @@ doctrine_migrations:
     organize_migrations: false
 
 fos_rest:
+    body_converter:
+        enabled: true
     routing_loader:
 
         default_format: json
