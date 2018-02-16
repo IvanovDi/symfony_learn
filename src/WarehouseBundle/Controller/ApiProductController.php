@@ -2,55 +2,42 @@
 
 namespace WarehouseBundle\Controller;
 
-use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\View\View;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use FOS\RestBundle\Controller\FOSRestController;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use WarehouseBundle\Entity\Product;
+use WarehouseBundle\Form\ProductForm;
 use Symfony\Component\HttpFoundation\Response;
-use WarehouseBundle\Entity\Category;
-use WarehouseBundle\Form\CategoryForm;
 
-
-
-class ApiCategoryController extends FOSRestController
+class ApiProductController extends FOSRestController
 {
-    public function getCategoriesAction()
+    public function getProductsAction()
     {
-        $data = $this->getDoctrine()->getRepository('WarehouseBundle:Category')->getAllCategories();
+        $em = $this->getDoctrine()->getManager();
 
-        $articles = [];
+        $products = $em->getRepository('WarehouseBundle:Product')->getAllProducts();
 
-        foreach ($data as $key => $item) {
-
-            $articles [$key] = [
-                'title' => $item->getTitle(),
-                'description' => $item->getDescription()
-             ];
-
-        }
-
-        $view = $this->view($articles, 200)
-        ->setFormat('json');
-
+        $view = $this->view($products, 200);
         return $this->handleView($view);
     }
 
-
-    public function getCategoryAction(Category $category)
+    public function getProductAction(Product $product)
     {
-        $view = $this->view($category)
-            ->setFormat('json');
 
+        $form = $this->createForm(ProductForm::class, $product, [
+            'csrf_protection' => false,
+        ]);
+
+        $view = $this->view($form->getData(), 200);
         return $this->handleView($view);
     }
 
-    public function postCategoryAction(Request $request)
+    public function postProductAction(Request $request)
     {
-
-        $form = $this->createForm(CategoryForm::class, new Category(), ['csrf_protection' => false, 'method' => $request->getMethod()]);
+        $form = $this->createForm(ProductForm::class, new Product(), [
+            'csrf_protection' => false,
+            'method' => $request->getMethod()
+        ]);
 
         $data = json_decode($request->getContent(), true);
         $form->submit($data);
@@ -59,11 +46,11 @@ class ApiCategoryController extends FOSRestController
         $errors = $validator->validate($form->getData());
 
         if (count($errors) == 0 && $form->isValid()) {
-            $category = $form->getData();
+            $product = $form->getData();
 
             $em = $this->getDoctrine()->getManager();
 
-            $em->persist($category);
+            $em->persist($product);
 
             $em->flush();
 
@@ -84,28 +71,28 @@ class ApiCategoryController extends FOSRestController
 
     }
 
-    public function putCategoryAction(Category $category, Request $request)
+    public function putProductAction(Product $product, Request $request)
     {
-        $form = $this->createForm(CategoryForm::class, $category, ['csrf_protection' => false, 'method' => $request->getMethod()]);
+        $form = $this->createForm(ProductForm::class, $product, ['csrf_protection' => false, 'method' => $request->getMethod()]);
 
         return $this->processForm($request, $form);
 
     }
 
 
-    public function patchCategoryAction(Category $category, Request $request)
+    public function patchProductAction(Product $product, Request $request)
     {
-        $form = $this->createForm(CategoryForm::class, $category, ['csrf_protection' => false, 'method' => $request->getMethod()]);
+        $form = $this->createForm(ProductForm::class, $product, ['csrf_protection' => false, 'method' => $request->getMethod()]);
 
         return $this->processForm($request, $form);
     }
 
-    public function deleteCategoryAction(Category $category)
+    public function deleteProductAction(Product $product)
     {
-        if($category) {
-             $em = $this->getDoctrine()->getManager();
-             $em->remove($category);
-             $em->flush();
+        if($product) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($product);
+            $em->flush();
         }
 
         return new Response(null, 204);

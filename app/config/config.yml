@@ -82,7 +82,7 @@ fos_rest:
     view:
         formats:
             rss:  true
-            xml:  false
+            xml:  true
             json: true
         templating_formats:
             html: true

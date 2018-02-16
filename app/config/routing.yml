@@ -11,6 +11,11 @@ api.category:
     type: rest
     resource: "@WarehouseBundle/Controller/ApiCategoryController.php"
 
+api.product:
+    prefix: /api
+    type: rest
+    resource: "@WarehouseBundle/Controller/ApiProductController.php"
+
 fos_oauth_server_token:
         resource: "@FOSOAuthServerBundle/Resources/config/routing/token.xml"
 

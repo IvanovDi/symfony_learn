@@ -12,4 +12,16 @@ use Doctrine\ORM\EntityRepository;
  */
 class ProductRepository extends EntityRepository
 {
+    public function getAllProducts ()
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb->select('p')
+            ->from('WarehouseBundle:Product', 'p')
+            ->orderBy('p.id', 'ASC');
+
+        $query = $qb->getQuery();
+
+        return $query->getResult();
+    }
 }
