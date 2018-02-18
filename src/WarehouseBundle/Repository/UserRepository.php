@@ -12,4 +12,16 @@ use Doctrine\ORM\EntityRepository;
  */
 class UserRepository extends EntityRepository
 {
+    public function getAllUsers()
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb->select('u')
+            ->from('WarehouseBundle:User', 'u')
+            ->orderBy('u.id', 'ASC');
+
+        $query = $qb->getQuery();
+
+        return $query->getResult();
+    }
 }

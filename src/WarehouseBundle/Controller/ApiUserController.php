@@ -2,73 +2,62 @@
 
 namespace WarehouseBundle\Controller;
 
-use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\View\View;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use FOS\RestBundle\Controller\FOSRestController;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use WarehouseBundle\Entity\Category;
-use WarehouseBundle\Form\CategoryForm;
+use WarehouseBundle\Entity\User;
+use WarehouseBundle\Form\UserForm;
 
-
-
-class ApiCategoryController extends FOSRestController
+class ApiUserController extends FOSRestController
 {
-    public function getCategoriesAction()
+    public function getUsersAction()
     {
-        $data = $this->getDoctrine()->getRepository('WarehouseBundle:Category')->getAllCategories();
+        $users = $this->getDoctrine()->getRepository('WarehouseBundle:User')->getAllUsers();
 
-        $articles = [];
-
-        foreach ($data as $key => $item) {
-
-            $articles [$key] = [
-                'title' => $item->getTitle(),
-                'description' => $item->getDescription()
-             ];
-
-        }
-
-        $view = $this->view($articles, 200)
-        ->setFormat('json');
-
-        return $this->handleView($view);
-    }
-
-
-    public function getCategoryAction(Category $category)
-    {
-        $view = $this->view($category)
+        $view = $this->view($users, 200)
             ->setFormat('json');
 
         return $this->handleView($view);
     }
 
-    public function postCategoryAction(Request $request)
-    {
 
-        $form = $this->createForm(CategoryForm::class, new Category(), ['csrf_protection' => false, 'method' => $request->getMethod()]);
+    public function getUserAction(User $user)
+    {
+        $view = $this->view($user, 200)
+            ->setFormat('json');
+
+        return $this->handleView($view);
+    }
+
+    public function postUserAction(Request $request)
+    {
+        $form = $this->createForm(UserForm::class, new User(), ['csrf_protection' => false, 'method' => $request->getMethod()]);
 
         $data = json_decode($request->getContent(), true);
         $form->submit($data);
 
+
         $validator = $this->get('validator');
         $errors = $validator->validate($form->getData());
 
+
         if (count($errors) == 0 && $form->isValid()) {
-            $category = $form->getData();
+            $user = $form->getData();
+
+            $passwordEncoder = $this->container->get('security.password_encoder');
+            $password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
+            $user->setPassword($password);
+            $user->setApiKey('@@@@');
 
             $em = $this->getDoctrine()->getManager();
 
-            $em->persist($category);
+            $em->persist($user);
 
             $em->flush();
 
             $response = new Response();
-            $response->setStatusCode(201);
+            $response->setStatusCode(200);
 
             return $response;
 
@@ -81,36 +70,35 @@ class ApiCategoryController extends FOSRestController
             return $response;
 
         }
-
     }
 
-    public function putCategoryAction(Category $category, Request $request)
+    public function putUserAction(User $user, Request $request)
     {
-        $form = $this->createForm(CategoryForm::class, $category, ['csrf_protection' => false, 'method' => $request->getMethod()]);
+        $form = $this->createForm(UserForm::class, $user, ['csrf_protection' => false, 'method' => $request->getMethod()]);
 
         return $this->processForm($request, $form);
 
     }
 
 
-    public function patchCategoryAction(Category $category, Request $request)
+    public function patchUserAction(User $user, Request $request)
     {
-        $form = $this->createForm(CategoryForm::class, $category, ['csrf_protection' => false, 'method' => $request->getMethod()]);
+        $form = $this->createForm(UserForm::class, $user, ['csrf_protection' => false, 'method' => $request->getMethod()]);
 
         return $this->processForm($request, $form);
     }
 
-    public function deleteCategoryAction(Category $category)
+    public function deleteUserAction(User $user)
     {
-        if($category) {
-             $em = $this->getDoctrine()->getManager();
-             $em->remove($category);
-             $em->flush();
+        if($user) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($user);
+            $em->flush();
         }
 
         return new Response(null, 204);
     }
-
+    //todo проверить как обновляются данные
     protected function processForm(Request $request, FormInterface $form)
     {
         $data = json_decode($request->getContent(), true);

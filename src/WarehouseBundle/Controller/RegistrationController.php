@@ -26,6 +26,7 @@ class RegistrationController extends Controller
             $passwordEncoder = $this->container->get('security.password_encoder');
             $password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
             $user->setPassword($password);
+            $user->setApiKey("@@@@");
             $em = $this->container->get('doctrine.orm.default_entity_manager');
             $em->persist($user);
             $em->flush();
