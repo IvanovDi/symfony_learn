@@ -29,7 +29,7 @@ class ApiCategoryControllerTest extends TestCase
 
     protected function getToken()
     {
-        $response = $this->client->get('http://127.0.0.1:8000/oauth/v2/token?grant_type=http://127.0.0.1:8000/grants/api_key&client_id=3_4is4xdogq6804g4o0kcw4s4c4w0gwk4wg4s40wwwswos0o8oc0&client_secret=6d0l4fo5c2o0c8wkogkk0wsswo8cwg448o4g8cwwcw08wos00g&api_key=qweqwe');
+        $response = $this->client->get('http://127.0.0.1:8000/oauth/v2/token?grant_type=http://127.0.0.1:8000/grants/api_key&client_id=3_219xg2x4b38ggcw4k8400ooc0k8ow4000kkogo4g04ksgsoc0c&client_secret=2t7gs5x3yhmoookcggckkwws4g848kkw840k0gwckggc40c0w4&api_key=@@@@');
         return json_decode($response->getBody()->getContents())->access_token;
     }
 
@@ -59,13 +59,13 @@ class ApiCategoryControllerTest extends TestCase
 
     public function testGetCategoryAction()
     {
-        $response = $this->client->get('http://localhost:8000/api/category/40?access_token='.$this->token);
+        $response = $this->client->get('http://localhost:8000/api/category/1?access_token='.$this->token);
         $this->assertEquals($response->getStatusCode(), 200);
     }
 
     public function testPutCategoryAction()
     {
-        $response = $this->client->get('http://localhost:8000/api/category/40?access_token='.$this->token);
+        $response = $this->client->get('http://localhost:8000/api/category/1?access_token='.$this->token);
         $category_before = json_decode($response->getBody()->getContents());
 
         $data = [
@@ -73,11 +73,11 @@ class ApiCategoryControllerTest extends TestCase
             'description' => 'test description_' . rand(0, 100),
         ];
 
-        $responsePut = $this->client->put('http://localhost:8000/api/category/40?access_token='.$this->token, [
+        $responsePut = $this->client->put('http://localhost:8000/api/category/1?access_token='.$this->token, [
             'body' => json_encode($data)
         ]);
 
-        $response = $this->client->get('http://localhost:8000/api/category/40?access_token='.$this->token);
+        $response = $this->client->get('http://localhost:8000/api/category/1?access_token='.$this->token);
         $category_after = json_decode($response->getBody()->getContents());
 
         $this->assertEquals(200, $responsePut->getStatusCode());
@@ -86,18 +86,18 @@ class ApiCategoryControllerTest extends TestCase
 
     public function testPatchCategoryAction()
     {
-        $response = $this->client->get('http://localhost:8000/api/category/40?access_token='.$this->token);
+        $response = $this->client->get('http://localhost:8000/api/category/1?access_token='.$this->token);
         $category_before = json_decode($response->getBody()->getContents());
 
         $data = [
             'description' => 'test description_' . rand(0, 100)
         ];
 
-        $responsePatch = $this->client->patch('http://localhost:8000/api/category/40?access_token='.$this->token, [
+        $responsePatch = $this->client->patch('http://localhost:8000/api/category/1?access_token='.$this->token, [
             'body' => json_encode($data)
         ]);
 
-        $response = $this->client->get('http://localhost:8000/api/category/40?access_token='.$this->token);
+        $response = $this->client->get('http://localhost:8000/api/category/1?access_token='.$this->token);
         $category_after = json_decode($response->getBody()->getContents());
 
         $this->assertEquals(200, $responsePatch->getStatusCode());
@@ -106,7 +106,7 @@ class ApiCategoryControllerTest extends TestCase
 
     public function testDeleteCategoryAction()
     {
-        $response = $this->client->delete('http://localhost:8000/api/category/40?access_token='.$this->token);
+        $response = $this->client->delete('http://localhost:8000/api/category/1?access_token='.$this->token);
 
         $this->assertEquals(204, $response->getStatusCode());
     }

@@ -29,5 +29,12 @@ services:
         arguments: ['@platform.user.repository']
         tags:
             - { name: fos_oauth_server.grant_extension, uri: http://127.0.0.1:8000/grants/api_key }
+    product.voter:
+        class: WarehouseBundle\Security\ProductVoter
+        tags:
+             - { name: security.voter }
+        arguments: ['@security.access.decision_manager']
+
+        public: false
 
 

@@ -6,7 +6,9 @@
     {% block nav %}
         <div>
             <a href="{{ path('create_category') }}">Add Category</a>
-            <a href="{{ path('create_product') }}">Add Product</a>
+            {% if is_granted('create') %}
+                <a href="{{ path('create_product') }}">Add Product</a>
+            {% endif %}
         </div>
     {% endblock %}
     <div class="container">

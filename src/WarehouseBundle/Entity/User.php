@@ -12,6 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @package WarehouseBundle\Entity
  * @ORM\Table(name="users")
  * @ORM\Entity(repositoryClass="WarehouseBundle\Repository\UserRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 
 
@@ -64,9 +65,32 @@ class User implements UserInterface, \Serializable
      */
     private $apiKey;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=64)
+     */
+    protected $role;
+
     public function __construct()
     {
         $this->isActive = true;
+    }
+
+    /**
+     * @ORM\PrePersist()
+     */
+    public function setRole()
+    {
+        $this->role = "ROLE_USER";
+    }
+
+    /**
+     * @return string
+     */
+    public function getRole()
+    {
+        return $this->role;
     }
 
     /**
@@ -87,7 +111,7 @@ class User implements UserInterface, \Serializable
 
     public function getRoles()
     {
-        return ['ROLE_USER'];
+        return ['ROLE_USER', 'ROLE_ADMIN'];
     }
 
     /** @see \Serializable::serialize() */

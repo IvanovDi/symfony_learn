@@ -12,6 +12,7 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  *
  * @ORM\Table(name="category")
  * @ORM\Entity(repositoryClass="WarehouseBundle\Repository\CategoryRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Category
 {
