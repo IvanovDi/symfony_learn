@@ -68,7 +68,7 @@ class User implements UserInterface, \Serializable
     /**
      * @var string
      *
-     * @ORM\Column(type="string", columnDefinition="")
+     * @ORM\Column(type="string")
      */
     private $roles = 'ROLE_USER';
 

@@ -5,8 +5,8 @@ security:
     role_hierarchy:
         ROLE_ADMIN: ROLE_USER
 
-    acl:
-        connection: default
+#    acl:
+#        connection: default
 
     encoders:
         WarehouseBundle\Entity\User:
