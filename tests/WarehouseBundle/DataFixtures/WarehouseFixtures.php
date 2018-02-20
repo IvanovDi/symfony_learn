@@ -1,6 +1,6 @@
 <?php
 
-namespace WarehouseBundle\DataFixture;
+namespace tests\WarehouseBundle\DataFixture;
 
 
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -45,6 +45,7 @@ class WarehouseFixtures extends Fixture
         $user->setEmail('dima@gmail.com');
         $user->setPassword('$2y$13$FXmjRVAOgOoQzpCT8c.zCuXU3ZqsHXHMMmx4cOEmXsI63p.X9ncWS');
         $user->setApiKey('@apikey@');
+        $user->setRoles('ROLE_ADMIN');
         $manager->persist($user);
 
 

@@ -68,9 +68,9 @@ class User implements UserInterface, \Serializable
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=64)
+     * @ORM\Column(type="string", columnDefinition="")
      */
-    protected $role;
+    private $roles = 'ROLE_USER';
 
     public function __construct()
     {
@@ -78,20 +78,20 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * @ORM\PrePersist()
+     * @param $role
      */
-    public function setRole()
+    public function setRoles($role)
     {
-        $this->role = "ROLE_USER";
+        $this->roles = $role;
     }
 
-    /**
-     * @return string
-     */
-    public function getRole()
-    {
-        return $this->role;
-    }
+//    /**
+//     * @return string
+//     */
+//    public function getRole()
+//    {
+//        return $this->roles;
+//    }
 
     /**
      * @param mixed $apiKey
@@ -111,7 +111,7 @@ class User implements UserInterface, \Serializable
 
     public function getRoles()
     {
-        return ['ROLE_USER', 'ROLE_ADMIN'];
+        return [$this->roles];
     }
 
     /** @see \Serializable::serialize() */

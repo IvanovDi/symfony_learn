@@ -54,7 +54,6 @@ class ProductVoter extends Voter
             return false;
         }
 
-        file_put_contents('/home/mark-55/Documents/file.txt', print_r($token, true));
         switch ($attribute) {
             case self::EDIT:
                 if($this->decisionManager->decide($token, ['ROLE_ADMIN'])) {

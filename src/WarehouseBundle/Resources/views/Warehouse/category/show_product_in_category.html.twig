@@ -15,8 +15,12 @@
             </span>
             <span style="padding-left: 50px  " class="product-list-actions">
                 <a href="{{ path('show_product', {'product': item.id}) }}">Detail</a>
-                <a href="{{ path('update_product', {'product': item.id}) }}">Edit</a>
-                <a href="{{ path('delete_product', { 'product': item.id }) }}">Delete</a>
+                {% if is_granted('edit') %}
+                    <a href="{{ path('update_product', {'product': item.id}) }}">Edit</a>
+                {% endif %}
+                {% if is_granted('delete') %}
+                    <a href="{{ path('delete_product', { 'product': item.id }) }}">Delete</a>
+                {% endif %}
             </span>
         </p>
     {% endfor %}

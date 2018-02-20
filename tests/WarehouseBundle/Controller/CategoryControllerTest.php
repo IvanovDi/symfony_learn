@@ -55,14 +55,13 @@ class CategoryControllerTest extends WebTestCase
 
         $count_category_before = $crawler->filter('.category-list > a')->count();
 
-        $crawler = $client->click($link);
+        $client->click($link);
 
         $crawler = $client->request('GET', '/home');
 
         $count_category_after = $crawler->filter('.category-list > a')->count();
-        file_put_contents('/home/dmitrovskiy/Documents/file.txt', print_r([$count_category_before, $count_category_after], true));
 
-        $this->assertTrue($count_category_before > $count_category_after);
+        $this->assertNotEquals($count_category_before, $count_category_after);
 
     }
 
