@@ -51,7 +51,7 @@ class ApiCategoryControllerTest extends TestCase
 
     }
 
-    public function testSGetCategoryAction()
+    public function testSGetCategoriesAction()
     {
         $response = $this->client->get('http://localhost:8000/api/categories?access_token='.$this->token);
         $this->assertEquals($response->getStatusCode(), 200);
