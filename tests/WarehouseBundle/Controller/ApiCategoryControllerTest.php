@@ -2,36 +2,10 @@
 
 namespace Test\WarehouseBundle\Controller;
 
-use PHPUnit\Framework\TestCase;
+use Tests\WarehouseBundle\Controller\ApiControllerTest;
 
-class ApiCategoryControllerTest extends TestCase
+class ApiCategoryControllerTest extends ApiControllerTest
 {
-
-    protected $client;
-
-    protected $token;
-
-
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->client = new \GuzzleHttp\Client([
-            'base_url' => 'http://localhost:8000',
-            'defaults' => [
-                'exceptions' => false
-            ]
-        ]);
-
-        $this->token = $this->getToken();
-
-    }
-
-    protected function getToken()
-    {
-        $response = $this->client->get('http://127.0.0.1:8000/oauth/v2/token?client_id=1_1pylbga86af4wwco8wgwcwgsk0occcwgsgk0cscgwwswwcw44g&client_secret=1qistd1qu7okwggcgc4g04kogw4w88wk0oo8wowsw0g4sokwkc&grant_type=password&username=dima&password=111');
-        return json_decode($response->getBody()->getContents())->access_token;
-    }
 
     public function testPostCategoryAction()
     {

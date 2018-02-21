@@ -2,35 +2,9 @@
 
 namespace Tests\WarehouseBundle\Controller;
 
-use PHPUnit\Framework\TestCase;
 
-class ApiUserControllerTest extends TestCase
+class ApiUserControllerTest extends ApiControllerTest
 {
-    protected $client;
-
-    protected $token;
-
-
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->client = new \GuzzleHttp\Client([
-            'base_url' => 'http://localhost:8000',
-            'defaults' => [
-                'exceptions' => false
-            ]
-        ]);
-
-        $this->token = $this->getToken();
-
-    }
-
-    protected function getToken()
-    {
-        $response = $this->client->get('http://127.0.0.1:8000/oauth/v2/token?client_id=6_4yzs0566dl0kcwsgwkg4wwccg4koc44cg880o0ws8s40osc8co&client_secret=4kjjryzg4xes4og0kckowk8w0owc4gokgo0kkcww4co80sk4go&grant_type=password&username=dima&password=111');
-        return json_decode($response->getBody()->getContents())->access_token;
-    }
 
     public function testPostUserAction()
     {
@@ -67,7 +41,7 @@ class ApiUserControllerTest extends TestCase
 
     public function testPutUserAction()
     {
-        $response = $this->client->get('http://localhost:8000/api/user/7?access_token='.$this->token);
+        $response = $this->client->get('http://localhost:8000/api/user/9?access_token='.$this->token);
         $user_before = json_decode($response->getBody()->getContents());
 
         $data = [
@@ -79,11 +53,11 @@ class ApiUserControllerTest extends TestCase
             ],
         ];
 
-        $responsePut = $this->client->put('http://localhost:8000/api/user/7?access_token='.$this->token, [
+        $responsePut = $this->client->put('http://localhost:8000/api/user/9?access_token='.$this->token, [
             'body' => json_encode($data)
         ]);
 
-        $response = $this->client->get('http://localhost:8000/api/user/7?access_token='.$this->token);
+        $response = $this->client->get('http://localhost:8000/api/user/9?access_token='.$this->token);
         $user_after = json_decode($response->getBody()->getContents());
 
         $this->assertEquals(200, $responsePut->getStatusCode());
@@ -92,7 +66,7 @@ class ApiUserControllerTest extends TestCase
 
     public function testPatchUserAction()
     {
-        $response = $this->client->get('http://localhost:8000/api/user/7?access_token='.$this->token);
+        $response = $this->client->get('http://localhost:8000/api/user/9?access_token='.$this->token);
         $user_before = json_decode($response->getBody()->getContents());
 
         $data = [
@@ -103,11 +77,11 @@ class ApiUserControllerTest extends TestCase
             ],
         ];
 
-        $responsePut = $this->client->patch('http://localhost:8000/api/user/7?access_token='.$this->token, [
+        $responsePut = $this->client->patch('http://localhost:8000/api/user/9?access_token='.$this->token, [
             'body' => json_encode($data)
         ]);
 
-        $response = $this->client->get('http://localhost:8000/api/user/7?access_token='.$this->token);
+        $response = $this->client->get('http://localhost:8000/api/user/9?access_token='.$this->token);
         $user_after = json_decode($response->getBody()->getContents());
 
         $this->assertEquals(200, $responsePut->getStatusCode());
@@ -116,7 +90,7 @@ class ApiUserControllerTest extends TestCase
 
     public function testDeleteUserAction()
     {
-        $response = $this->client->delete('http://localhost:8000/api/user/7?access_token='.$this->token);
+        $response = $this->client->delete('http://localhost:8000/api/user/9?access_token='.$this->token);
 
         $this->assertEquals(204, $response->getStatusCode());
     }
