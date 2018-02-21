@@ -21,18 +21,7 @@ class ApiCategoryController extends FOSRestController
     {
         $data = $this->getDoctrine()->getRepository('WarehouseBundle:Category')->getAllCategories();
 
-        $articles = [];
-
-        foreach ($data as $key => $item) {
-
-            $articles [$key] = [
-                'title' => $item->getTitle(),
-                'description' => $item->getDescription()
-             ];
-
-        }
-
-        $view = $this->view($articles, 200)
+        $view = $this->view($data, 200)
         ->setFormat('json');
 
         return $this->handleView($view);

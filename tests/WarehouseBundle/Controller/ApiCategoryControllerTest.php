@@ -7,6 +7,16 @@ use Tests\WarehouseBundle\Controller\ApiControllerTest;
 class ApiCategoryControllerTest extends ApiControllerTest
 {
 
+    protected function getLastId()
+    {
+        $response = $this->client->get('http://localhost:8000/api/categories?access_token='.$this->token);
+        $catgories = json_decode($response->getBody()->getContents());
+        return $catgories[0]->id;
+    }
+
+    /**
+     * @group api
+     */
     public function testPostCategoryAction()
     {
 
@@ -21,25 +31,32 @@ class ApiCategoryControllerTest extends ApiControllerTest
 
         $this->assertEquals(201, $response->getStatusCode());
 
-        print_r($this->getToken());
-
     }
 
-    public function testSGetCategoriesAction()
+    /**
+     * @group api
+     */
+    public function testGetCategoriesAction()
     {
         $response = $this->client->get('http://localhost:8000/api/categories?access_token='.$this->token);
         $this->assertEquals($response->getStatusCode(), 200);
     }
 
+    /**
+     * @group api
+     */
     public function testGetCategoryAction()
     {
-        $response = $this->client->get('http://localhost:8000/api/category/2?access_token='.$this->token);
+        $response = $this->client->get('http://localhost:8000/api/category/'. $this->getLastId() .'?access_token='.$this->token);
         $this->assertEquals($response->getStatusCode(), 200);
     }
 
+    /**
+     * @group api
+     */
     public function testPutCategoryAction()
     {
-        $response = $this->client->get('http://localhost:8000/api/category/2?access_token='.$this->token);
+        $response = $this->client->get('http://localhost:8000/api/category/'. $this->getLastId() .'?access_token='.$this->token);
         $category_before = json_decode($response->getBody()->getContents());
 
         $data = [
@@ -47,31 +64,34 @@ class ApiCategoryControllerTest extends ApiControllerTest
             'description' => 'test description_' . rand(0, 100),
         ];
 
-        $responsePut = $this->client->put('http://localhost:8000/api/category/2?access_token='.$this->token, [
+        $responsePut = $this->client->put('http://localhost:8000/api/category/'. $this->getLastId() .'?access_token='.$this->token, [
             'body' => json_encode($data)
         ]);
 
-        $response = $this->client->get('http://localhost:8000/api/category/2?access_token='.$this->token);
+        $response = $this->client->get('http://localhost:8000/api/category/'. $this->getLastId() .'?access_token='.$this->token);
         $category_after = json_decode($response->getBody()->getContents());
 
         $this->assertEquals(200, $responsePut->getStatusCode());
         $this->assertNotEquals($category_before->title, $category_after->title);
     }
 
+    /**
+     * @group api
+     */
     public function testPatchCategoryAction()
     {
-        $response = $this->client->get('http://localhost:8000/api/category/2?access_token='.$this->token);
+        $response = $this->client->get('http://localhost:8000/api/category/'. $this->getLastId() .'?access_token='.$this->token);
         $category_before = json_decode($response->getBody()->getContents());
 
         $data = [
             'description' => 'test description_' . rand(0, 100)
         ];
 
-        $responsePatch = $this->client->patch('http://localhost:8000/api/category/2?access_token='.$this->token, [
+        $responsePatch = $this->client->patch('http://localhost:8000/api/category/'. $this->getLastId() .'?access_token='.$this->token, [
             'body' => json_encode($data)
         ]);
 
-        $response = $this->client->get('http://localhost:8000/api/category/2?access_token='.$this->token);
+        $response = $this->client->get('http://localhost:8000/api/category/'. $this->getLastId() .'?access_token='.$this->token);
         $category_after = json_decode($response->getBody()->getContents());
 
         $this->assertEquals(200, $responsePatch->getStatusCode());
@@ -80,8 +100,8 @@ class ApiCategoryControllerTest extends ApiControllerTest
 
     public function testDeleteCategoryAction()
     {
-        $response = $this->client->delete('http://localhost:8000/api/category/2?access_token='.$this->token);
-
-        $this->assertEquals(204, $response->getStatusCode());
+//        $response = $this->client->delete('http://localhost:8000/api/category/'. $this->getLastId() .'?access_token='.$this->token);
+//
+//        $this->assertEquals(204, $response->getStatusCode());
     }
 }

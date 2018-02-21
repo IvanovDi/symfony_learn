@@ -14,6 +14,10 @@ class WarehouseFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
 
+        $sql = "INSERT INTO symfony.client (id, random_id, redirect_uris, secret, allowed_grant_types) VALUES (11, '4koqwixjyg00s0o0g4soww0ogcoso88o4c80k8o0cwwgwo4k8g', 'a:1:{i:0;s:21:\"http://127.0.0.1:8000\";}', '2cirquyqslq8g8g44088wkwo0kg80oskwogs4gc8k8cgwk04ko', 'a:5:{i:0;s:18:\"authorization_code\";i:1;s:8:\"password\";i:2;s:13:\"refresh_token\";i:3;s:5:\"token\";i:4;s:18:\"client_credentials\";}');";
+
+        $manager->getConnection()->exec( $sql );
+
         for ($i = 0; $i < 20; $i++) {
             $category = new Category();
             $category->setTitle('category_' . $i);
@@ -43,7 +47,7 @@ class WarehouseFixtures extends Fixture
         $user = new User();
         $user->setUsername('dima');
         $user->setEmail('dima@gmail.com');
-        $user->setPassword('$2y$13$FXmjRVAOgOoQzpCT8c.zCuXU3ZqsHXHMMmx4cOEmXsI63p.X9ncWS');
+        $user->setPassword('$2y$13$yVu2W/0UdR9OTRYxp.d5rudFWPNXq8Lq3pjQmOzotssef0yHcIHGC');
         $user->setApiKey('@apikey@');
         $user->setRoles('ROLE_ADMIN');
         $manager->persist($user);
