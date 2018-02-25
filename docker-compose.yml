@@ -1,33 +1,35 @@
 version: "2"
 services:
-    mysql:
-        image: mysql
-        restart: always
-        ports:
-            - "3306:3306"
-        environment:
-            - MYSQL_ROOT_PASSWORD=root
-            - MYSQL_DATABASE=symfony
-            - MYSQL_USER=root
-            - MYSQL_PASSWORD=root
+    db:
+      image: mysql
+      ports:
+          - 3306:3306
+      volumes:
+          - "./.data/db:/var/lib/mysql"
+      environment:
+          - MYSQL_ROOT_PASSWORD=root
+          - DB_HOST=127.0.0.1
+          - MYSQL_DATABASE=symfony
+          - MYSQL_USER=root
+          - MYSQL_PASSWORD=root
     php:
         build:
             context: docker/php-fpm
         ports:
-            - "9000:9000"
+            - "127.0.0.1:9000:9000"
         volumes:
             - ./:/var/www/symfony
             - ./logs/symfony:/var/www/symfony/app/logs
         links:
-          - mysql
+            - db
     nginx:
         build: docker/nginx
         ports:
-            - 80:80
+            - "127.0.0.1:8080:8080"
+            - "80:80"
+            - "443:443"
         volumes_from:
             - php
         volumes:
+            - ./:/var/www/symfony
             - ./logs/nginx/:/var/log/nginx
-        links:
-          - php
-          - mysql
