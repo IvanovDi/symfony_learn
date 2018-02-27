@@ -3,12 +3,11 @@ services:
     db:
       image: mysql
       ports:
-          - 3306:3306
+          - "127.0.0.1:3306:3307"
       volumes:
           - "./.data/db:/var/lib/mysql"
       environment:
           - MYSQL_ROOT_PASSWORD=root
-          - DB_HOST=127.0.0.1
           - MYSQL_DATABASE=symfony
           - MYSQL_USER=root
           - MYSQL_PASSWORD=root
@@ -25,8 +24,7 @@ services:
     nginx:
         build: docker/nginx
         ports:
-            - "127.0.0.1:8080:8080"
-            - "80:80"
+            - "127.0.0.1:80:80"
             - "443:443"
         volumes_from:
             - php

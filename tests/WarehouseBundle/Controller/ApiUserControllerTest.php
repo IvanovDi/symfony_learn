@@ -2,6 +2,8 @@
 
 namespace Tests\WarehouseBundle\Controller;
 
+use tests\WarehouseBundle\Controller\ApiControllerTest;
+
 
 class ApiUserControllerTest extends ApiControllerTest
 {
@@ -26,7 +28,7 @@ class ApiUserControllerTest extends ApiControllerTest
             ],
         ];
 
-        $response = $this->client->post('http://localhost:8000/api/user?access_token='.$this->token, [
+        $response = $this->client->post('http://localhost:8000/api/users?access_token='.$this->token, [
             'body' => json_encode($data)
         ]);
 
@@ -39,7 +41,7 @@ class ApiUserControllerTest extends ApiControllerTest
      */
     public function testGetUserAction()
     {
-        $response = $this->client->get('http://localhost:8000/api/user/' . $this->getLastId() . '?access_token='.$this->token);
+        $response = $this->client->get('http://localhost:8000/api/users/' . $this->getLastId() . '?access_token='.$this->token);
         $this->assertEquals($response->getStatusCode(), 200);
     }
 
@@ -57,7 +59,7 @@ class ApiUserControllerTest extends ApiControllerTest
      */
     public function testPutUserAction()
     {
-        $response = $this->client->get('http://localhost:8000/api/user/' . $this->getLastId() . '?access_token='.$this->token);
+        $response = $this->client->get('http://localhost:8000/api/users/' . $this->getLastId() . '?access_token='.$this->token);
         $user_before = json_decode($response->getBody()->getContents());
 
         $data = [
@@ -69,14 +71,14 @@ class ApiUserControllerTest extends ApiControllerTest
             ],
         ];
 
-        $responsePut = $this->client->put('http://localhost:8000/api/user/' . $this->getLastId() . '?access_token='.$this->token, [
+        $responsePut = $this->client->put('http://localhost:8000/api/users/' . $this->getLastId() . '?access_token='.$this->token, [
             'body' => json_encode($data)
         ]);
 
-        $response = $this->client->get('http://localhost:8000/api/user/' . $this->getLastId() . '?access_token='.$this->token);
+        $response = $this->client->get('http://localhost:8000/api/users/' . $this->getLastId() . '?access_token='.$this->token);
         $user_after = json_decode($response->getBody()->getContents());
 
-        $this->assertEquals(200, $responsePut->getStatusCode());
+        $this->assertEquals(204, $responsePut->getStatusCode());
         $this->assertNotEquals($user_before->username, $user_after->username);
     }
 
@@ -85,7 +87,7 @@ class ApiUserControllerTest extends ApiControllerTest
      */
     public function testPatchUserAction()
     {
-        $response = $this->client->get('http://localhost:8000/api/user/' . $this->getLastId() . '?access_token='.$this->token);
+        $response = $this->client->get('http://localhost:8000/api/users/' . $this->getLastId() . '?access_token='.$this->token);
         $user_before = json_decode($response->getBody()->getContents());
 
         $data = [
@@ -96,14 +98,14 @@ class ApiUserControllerTest extends ApiControllerTest
             ],
         ];
 
-        $responsePut = $this->client->patch('http://localhost:8000/api/user/' . $this->getLastId() . '?access_token='.$this->token, [
+        $responsePut = $this->client->patch('http://localhost:8000/api/users/' . $this->getLastId() . '?access_token='.$this->token, [
             'body' => json_encode($data)
         ]);
 
-        $response = $this->client->get('http://localhost:8000/api/user/' . $this->getLastId() . '?access_token='.$this->token);
+        $response = $this->client->get('http://localhost:8000/api/users/' . $this->getLastId() . '?access_token='.$this->token);
         $user_after = json_decode($response->getBody()->getContents());
 
-        $this->assertEquals(200, $responsePut->getStatusCode());
+        $this->assertEquals(204, $responsePut->getStatusCode());
         $this->assertNotEquals($user_before->username, $user_after->username);
     }
 

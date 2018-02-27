@@ -172,14 +172,12 @@ class Category
 
     public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
-        $metadata->addPropertyConstraint('title', new NotBlank());
         $metadata->addPropertyConstraint('title', new Length([
             'min' => 3,
             'max' => 20,
             'minMessage' => 'title must be minimum {{ limit }} symbol',
             'maxMessage' => 'title must be maximum {{ limit }} symbol',
             ]));
-        $metadata->addPropertyConstraint('description', new NotBlank());
         $metadata->addPropertyConstraint('description', new Length([
             'min' => 3,
             'max' => 100,

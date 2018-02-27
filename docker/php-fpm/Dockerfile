@@ -1,8 +1,10 @@
-FROM php:7.0-fpm
+FROM php:7.1-fpm
+ARG TIMEZONE
 
-ENV PATH /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+MAINTAINER Maxence POUTORD <maxence.poutord@gmail.com>
 
 RUN apt-get update && apt-get install -y \
+    openssl \
     git \
     unzip
 
@@ -11,17 +13,28 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN composer --version
 
 # Set timezone
-RUN echo "America/Toronto" > /etc/timezone
-RUN dpkg-reconfigure -f noninteractive tzdata
+RUN printf '[PHP]\ndate.timezone = "%s"\n', "Europe/Kiev" > /usr/local/etc/php/conf.d/tzone.ini
+RUN "date"
 
 # Type docker-php-ext-install to see available extensions
 RUN docker-php-ext-install pdo pdo_mysql
 
+ADD php.ini /usr/local/etc/php/conf.d/40-custom.ini
 
-# Cleanup
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Add Symfony alias
-RUN echo 'alias sf="php bin/console"' >> ~/.bashrc
+# install xdebug
+RUN pecl install xdebug
+RUN docker-php-ext-enable xdebug
+RUN echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN echo "display_startup_errors = On" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN echo "display_errors = On" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN echo "xdebug.remote_enable=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN echo "xdebug.remote_connect_back=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN echo "xdebug.idekey=\"PHPSTORM\"" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN echo "xdebug.remote_port=9001" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+
+
+RUN echo 'alias sf="php app/console"' >> ~/.bashrc
+RUN echo 'alias sf3="php bin/console"' >> ~/.bashrc
 
 WORKDIR /var/www/symfony

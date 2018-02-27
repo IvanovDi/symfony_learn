@@ -14,7 +14,7 @@ class WarehouseFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
 
-        $sql = "INSERT INTO symfony.client (id, random_id, redirect_uris, secret, allowed_grant_types) VALUES (11, '4koqwixjyg00s0o0g4soww0ogcoso88o4c80k8o0cwwgwo4k8g', 'a:1:{i:0;s:21:\"http://127.0.0.1:8000\";}', '2cirquyqslq8g8g44088wkwo0kg80oskwogs4gc8k8cgwk04ko', 'a:5:{i:0;s:18:\"authorization_code\";i:1;s:8:\"password\";i:2;s:13:\"refresh_token\";i:3;s:5:\"token\";i:4;s:18:\"client_credentials\";}');";
+        $sql = "INSERT INTO client (id, random_id, redirect_uris, secret, allowed_grant_types) VALUES (1, '4eyp1k2a6gw0kc4ocgwc4s00kgwkk0kw0oco4ggokswg0o4cco', 'a:1:{i:0;s:11:\"CLIENT_HOST\";}', '4v3bk52yaqyokskckk0sgwogwkwc8o4csgoc0occcwgkowgsgo', 'a:5:{i:0;s:18:\"authorization_code\";i:1;s:8:\"password\";i:2;s:13:\"refresh_token\";i:3;s:5:\"token\";i:4;s:18:\"client_credentials\";}');";
 
         $manager->getConnection()->exec( $sql );
 
@@ -25,7 +25,6 @@ class WarehouseFixtures extends Fixture
             $manager->persist($category);
         }
 
-        $manager->flush();
 
         for($i = 0; $i < 20; $i++) {
             if($i == 1) {continue;}

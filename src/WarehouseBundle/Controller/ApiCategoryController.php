@@ -27,7 +27,12 @@ class ApiCategoryController extends FOSRestController
         return $this->handleView($view);
     }
 
-
+    /**
+     * @param Category $category
+     * @return Response
+     *
+     * @Rest\Route("/categories/{category}")
+     */
     public function getCategoryAction(Category $category)
     {
         $view = $this->view($category)
@@ -36,12 +41,14 @@ class ApiCategoryController extends FOSRestController
         return $this->handleView($view);
     }
 
-    public function postCategoryAction(Request $request)
+    public function postCategoriesAction(Request $request)
     {
 
         $form = $this->createForm(CategoryForm::class, new Category(), ['csrf_protection' => false, 'method' => $request->getMethod()]);
 
         $data = json_decode($request->getContent(), true);
+
+        file_put_contents('/home/mark-55/Documents/file.txt', print_r($data, true));
         $form->submit($data);
 
         $validator = $this->get('validator');
@@ -56,40 +63,39 @@ class ApiCategoryController extends FOSRestController
 
             $em->flush();
 
-            $response = new Response();
-            $response->setStatusCode(201);
+            $view = $this->view($category, 201)
+                ->setFormat('json');
 
-            return $response;
+            return $this->handleView($view);
 
         } else {
 
-            $response = new Response();
-            $response->setStatusCode(400);
-            $response->setContent($errors);
+            $view = $this->view($errors, 400)
+                ->setFormat('json');
 
-            return $response;
+            return $this->handleView($view);
 
         }
 
     }
 
-    public function putCategoryAction(Category $category, Request $request)
+    public function putCategoriesAction(Category $category, Request $request)
     {
         $form = $this->createForm(CategoryForm::class, $category, ['csrf_protection' => false, 'method' => $request->getMethod()]);
 
-        return $this->processForm($request, $form);
+        return $this->processForm($request, $form, $category);
 
     }
 
 
-    public function patchCategoryAction(Category $category, Request $request)
+    public function patchCategoriesAction(Category $category, Request $request)
     {
         $form = $this->createForm(CategoryForm::class, $category, ['csrf_protection' => false, 'method' => $request->getMethod()]);
 
-        return $this->processForm($request, $form);
+        return $this->processForm($request, $form, $category);
     }
 
-    public function deleteCategoryAction(Category $category)
+    public function deleteCategoriesAction(Category $category)
     {
         if($category) {
              $em = $this->getDoctrine()->getManager();
@@ -100,7 +106,7 @@ class ApiCategoryController extends FOSRestController
         return new Response(null, 204);
     }
 
-    protected function processForm(Request $request, FormInterface $form)
+    protected function processForm(Request $request, FormInterface $form, Category $category)
     {
         $data = json_decode($request->getContent(), true);
 
@@ -117,18 +123,17 @@ class ApiCategoryController extends FOSRestController
 
             $em->flush();
 
-            $response = new Response();
-            $response->setStatusCode(200);
+            $view = $this->view($category,204)
+                ->setFormat('json');
 
-            return $response;
+            return $this->handleView($view);
 
         } else {
 
-            $response = new Response();
-            $response->setStatusCode(400);
-            $response->setContent($errors);
+            $view = $this->view($errors, 400)
+                ->setFormat('json');
 
-            return $response;
+            return $this->handleView($view);
 
         }
     }

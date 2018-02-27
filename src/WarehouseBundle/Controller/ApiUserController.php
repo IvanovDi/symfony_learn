@@ -2,6 +2,7 @@
 
 namespace WarehouseBundle\Controller;
 
+use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,7 +22,12 @@ class ApiUserController extends FOSRestController
         return $this->handleView($view);
     }
 
-
+    /**
+     * @param User $user
+     * @return Response
+     *
+     * @Rest\Route("/users/{user}")
+     */
     public function getUserAction(User $user)
     {
         $view = $this->view($user, 200)
@@ -30,7 +36,7 @@ class ApiUserController extends FOSRestController
         return $this->handleView($view);
     }
 
-    public function postUserAction(Request $request)
+    public function postUsersAction(Request $request)
     {
         $form = $this->createForm(UserForm::class, new User(), ['csrf_protection' => false, 'method' => $request->getMethod()]);
 
@@ -56,39 +62,37 @@ class ApiUserController extends FOSRestController
 
             $em->flush();
 
-            $response = new Response();
-            $response->setStatusCode(201);
+            $view = $this->view($user, 201)
+                ->setFormat('json');
 
-            return $response;
-
+            return $this->handleView($view);
         } else {
 
-            $response = new Response();
-            $response->setStatusCode(400);
-            $response->setContent($errors);
+            $view = $this->view($errors, 400)
+                ->setFormat('json');
 
-            return $response;
+            return $this->handleView($view);
 
         }
     }
 
-    public function putUserAction(User $user, Request $request)
+    public function putUsersAction(User $user, Request $request)
     {
         $form = $this->createForm(UserForm::class, $user, ['csrf_protection' => false, 'method' => $request->getMethod()]);
 
-        return $this->processForm($request, $form);
+        return $this->processForm($request, $form, $user);
 
     }
 
 
-    public function patchUserAction(User $user, Request $request)
+    public function patchUsersAction(User $user, Request $request)
     {
         $form = $this->createForm(UserForm::class, $user, ['csrf_protection' => false, 'method' => $request->getMethod()]);
 
-        return $this->processForm($request, $form);
+        return $this->processForm($request, $form, $user);
     }
 
-    public function deleteUserAction(User $user)
+    public function deleteUsersAction(User $user)
     {
         if($user) {
             $em = $this->getDoctrine()->getManager();
@@ -99,7 +103,7 @@ class ApiUserController extends FOSRestController
         return new Response(null, 204);
     }
     //todo проверить как обновляются данные
-    protected function processForm(Request $request, FormInterface $form)
+    protected function processForm(Request $request, FormInterface $form, User $user)
     {
         $data = json_decode($request->getContent(), true);
 
@@ -116,18 +120,17 @@ class ApiUserController extends FOSRestController
 
             $em->flush();
 
-            $response = new Response();
-            $response->setStatusCode(200);
+            $view = $this->view($user, 204)
+                ->setFormat('json');
 
-            return $response;
+            return $this->handleView($view);
 
         } else {
 
-            $response = new Response();
-            $response->setStatusCode(400);
-            $response->setContent($errors);
+            $view = $this->view($errors, 400)
+                ->setFormat('json');
 
-            return $response;
+            return $this->handleView($view);
 
         }
     }

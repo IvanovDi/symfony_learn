@@ -2,6 +2,7 @@
 
 namespace WarehouseBundle\Controller;
 
+use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,6 +23,12 @@ class ApiProductController extends FOSRestController
         return $this->handleView($view);
     }
 
+    /**
+     * @param Product $product
+     * @return Response
+     *
+     * @Rest\Route("/products/{product}")
+     */
     public function getProductAction(Product $product)
     {
 
@@ -33,11 +40,11 @@ class ApiProductController extends FOSRestController
         return $this->handleView($view);
     }
 
-    public function postProductAction(Request $request)
+    public function postProductsAction(Request $request)
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        $this->denyAccessUnlessGranted('create', $user);
+        $this->denyAccessUnlessGranted('create', $user, 403);
 
         $form = $this->createForm(ProductForm::class, new Product(), [
             'csrf_protection' => false,
@@ -59,52 +66,52 @@ class ApiProductController extends FOSRestController
 
             $em->flush();
 
-            $response = new Response();
-            $response->setStatusCode(201);
+            $view = $this->view($product, 201)
+                ->setFormat('json');
 
-            return $response;
+            return $this->handleView($view);
+
 
         } else {
 
-            $response = new Response();
-            $response->setStatusCode(400);
-            $response->setContent($errors);
+            $view = $this->view($errors, 400)
+                ->setFormat('json');
 
-            return $response;
+            return $this->handleView($view);
 
         }
 
     }
 
-    public function putProductAction(Product $product, Request $request)
+    public function putProductsAction(Product $product, Request $request)
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        $this->denyAccessUnlessGranted('edit', $user);
+        $this->denyAccessUnlessGranted('edit', $user, 403);
 
         $form = $this->createForm(ProductForm::class, $product, ['csrf_protection' => false, 'method' => $request->getMethod()]);
 
-        return $this->processForm($request, $form);
+        return $this->processForm($request, $form, $product);
 
     }
 
 
-    public function patchProductAction(Product $product, Request $request)
+    public function patchProductsAction(Product $product, Request $request)
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        $this->denyAccessUnlessGranted('edit', $user);
+        $this->denyAccessUnlessGranted('edit', $user, 403);
 
         $form = $this->createForm(ProductForm::class, $product, ['csrf_protection' => false, 'method' => $request->getMethod()]);
 
-        return $this->processForm($request, $form);
+        return $this->processForm($request, $form, $product);
     }
 
-    public function deleteProductAction(Product $product)
+    public function deleteProductsAction(Product $product)
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        $this->denyAccessUnlessGranted('delete', $user);
+        $this->denyAccessUnlessGranted('delete', $user, 403);
 
         if($product) {
             $em = $this->getDoctrine()->getManager();
@@ -115,7 +122,7 @@ class ApiProductController extends FOSRestController
         return new Response(null, 204);
     }
 
-    protected function processForm(Request $request, FormInterface $form)
+    protected function processForm(Request $request, FormInterface $form, Product $product)
     {
         $data = json_decode($request->getContent(), true);
 
@@ -132,18 +139,17 @@ class ApiProductController extends FOSRestController
 
             $em->flush();
 
-            $response = new Response();
-            $response->setStatusCode(200);
+            $view = $this->view($product, 200)
+                ->setFormat('json');
 
-            return $response;
+            return $this->handleView($view);
 
         } else {
 
-            $response = new Response();
-            $response->setStatusCode(400);
-            $response->setContent($errors);
+            $view = $this->view($errors, 400)
+                ->setFormat('json');
 
-            return $response;
+            return $this->handleView($view);
 
         }
     }

@@ -2,7 +2,7 @@
 
 namespace Tests\WarehouseBundle\Controller;
 
-
+use tests\WarehouseBundle\Controller\ApiControllerTest;
 
 class ApiProductControllerTest extends ApiControllerTest
 {
@@ -35,7 +35,7 @@ class ApiProductControllerTest extends ApiControllerTest
             'category' => $this->getLastCategoryId()
         ];
 
-        $response = $this->client->post('http://localhost:8000/api/product?access_token='.$this->token, [
+        $response = $this->client->post('http://localhost:8000/api/products?access_token='.$this->token, [
             'body' => json_encode($data)
         ]);
 
@@ -57,7 +57,7 @@ class ApiProductControllerTest extends ApiControllerTest
      */
     public function testGetProductAction()
     {
-        $response = $this->client->get('http://localhost:8000/api/product/'. $this->getLastId() .'?access_token='.$this->token);
+        $response = $this->client->get('http://localhost:8000/api/products/'. $this->getLastId() .'?access_token='.$this->token);
         $this->assertEquals($response->getStatusCode(), 200);
     }
 
@@ -66,7 +66,7 @@ class ApiProductControllerTest extends ApiControllerTest
      */
     public function testPutProductAction()
     {
-        $response = $this->client->get('http://localhost:8000/api/product/'. $this->getLastId() .'?access_token='.$this->token);
+        $response = $this->client->get('http://localhost:8000/api/products/'. $this->getLastId() .'?access_token='.$this->token);
         $product_before = json_decode($response->getBody()->getContents());
 
         $data = [
@@ -76,11 +76,11 @@ class ApiProductControllerTest extends ApiControllerTest
             'category' => $this->getLastCategoryId()
         ];
 
-        $responsePut = $this->client->put('http://localhost:8000/api/product/'. $this->getLastId() .'?access_token='.$this->token, [
+        $responsePut = $this->client->put('http://localhost:8000/api/products/'. $this->getLastId() .'?access_token='.$this->token, [
             'body' => json_encode($data)
         ]);
 
-        $response = $this->client->get('http://localhost:8000/api/product/'. $this->getLastId() .'?access_token='.$this->token);
+        $response = $this->client->get('http://localhost:8000/api/products/'. $this->getLastId() .'?access_token='.$this->token);
         $product_after = json_decode($response->getBody()->getContents());
 
         $this->assertEquals(200, $responsePut->getStatusCode());
@@ -92,18 +92,18 @@ class ApiProductControllerTest extends ApiControllerTest
      */
     public function testPatchProductAction()
     {
-        $response = $this->client->get('http://localhost:8000/api/product/'. $this->getLastId() .'?access_token='.$this->token);
+        $response = $this->client->get('http://localhost:8000/api/products/'. $this->getLastId() .'?access_token='.$this->token);
         $product_before = json_decode($response->getBody()->getContents());
 
         $data = [
             'description' => 'patch description_' . rand(0, 100)
         ];
 
-        $responsePatch = $this->client->patch('http://localhost:8000/api/product/'. $this->getLastId() .'?access_token='.$this->token, [
+        $responsePatch = $this->client->patch('http://localhost:8000/api/products/'. $this->getLastId() .'?access_token='.$this->token, [
             'body' => json_encode($data)
         ]);
 
-        $response = $this->client->get('http://localhost:8000/api/product/'. $this->getLastId() .'?access_token='.$this->token);
+        $response = $this->client->get('http://localhost:8000/api/products/'. $this->getLastId() .'?access_token='.$this->token);
         $product_after = json_decode($response->getBody()->getContents());
 
         $this->assertEquals(200, $responsePatch->getStatusCode());
@@ -115,7 +115,7 @@ class ApiProductControllerTest extends ApiControllerTest
      */
     public function testDeleteProductAction()
     {
-        $response = $this->client->delete('http://localhost:8000/api/product/'. $this->getLastId() .'?access_token='.$this->token);
+        $response = $this->client->delete('http://localhost:8000/api/products/'. $this->getLastId() .'?access_token='.$this->token);
 
         $this->assertEquals(204, $response->getStatusCode());
     }

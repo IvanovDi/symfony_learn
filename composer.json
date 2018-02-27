@@ -7,7 +7,7 @@
         "psr-4": {
             "AppBundle\\": "src/AppBundle",
             "WarehouseBundle\\": "src/WarehouseBundle",
-            "Tests\\": "tests"
+            "tests\\": "tests"
         },
         "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
     },
