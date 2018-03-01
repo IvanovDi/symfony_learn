@@ -115,6 +115,10 @@ class ApiCategoryControllerTest extends ApiControllerTest
         $this->assertNotEquals($category_before->description, $category_after->description);
     }
 
+
+    /**
+     * @group api
+     */
     public function testDeleteCategoryAction()
     {
         $this->loadFixtures([

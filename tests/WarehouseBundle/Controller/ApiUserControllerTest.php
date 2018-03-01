@@ -7,11 +7,18 @@ use tests\WarehouseBundle\Controller\ApiControllerTest;
 
 class ApiUserControllerTest extends ApiControllerTest
 {
+
+    protected function getToken()
+    {
+        $this->client->request('GET', 'http://127.0.0.1:8000/oauth/v2/token?client_id=1_4eyp1k2a6gw0kc4ocgwc4s00kgwkk0kw0oco4ggokswg0o4cco&client_secret=4v3bk52yaqyokskckk0sgwogwkwc8o4csgoc0occcwgkowgsgo&grant_type=password&username=dima&password=111');
+        return json_decode($this->client->getResponse()->getContent())->access_token;
+    }
+
     protected function getLastId()
     {
-        $response = $this->client->get('http://localhost:8000/api/users?access_token='.$this->token);
-        $users = json_decode($response->getBody()->getContents());
-        return $users[0]->id;
+        $this->client->request('GET', 'http://localhost:8000/api/users?access_token='.$this->getToken());
+        $users = json_decode($this->client->getResponse()->getContent());
+        return $users[count($users) - 1]->id;
     }
 
     /**
@@ -19,20 +26,16 @@ class ApiUserControllerTest extends ApiControllerTest
      */
     public function testPostUserAction()
     {
-        $data = [
-            'username' => 'test User' . rand(0, 100),
-            'email' => 'test' . rand(0, 100) . '@gmail.com',
-            'plainPassword' => [
-                'first' => '111',
-                'second' => '111'
-            ],
-        ];
-
-        $response = $this->client->post('http://localhost:8000/api/users?access_token='.$this->token, [
-            'body' => json_encode($data)
+        $this->loadFixtures([
+            'tests\WarehouseBundle\DataFixtures\AuthFixtures',
+            'tests\WarehouseBundle\DataFixtures\WarehouseFixtures'
         ]);
 
-        $this->assertEquals(201, $response->getStatusCode());
+        $this->client->request('POST', 'http://localhost:8000/api/users?access_token='.$this->getToken(),[],[],
+            ['CONTENT_TYPE' => 'application/json'],
+            '{"username": "user test","email": "test@gmail.com", "plainPassword": {"first": "111", "second": "111"}}');
+
+        $this->assertEquals(201, $this->client->getResponse()->getStatusCode());
 
     }
 
@@ -41,8 +44,8 @@ class ApiUserControllerTest extends ApiControllerTest
      */
     public function testGetUserAction()
     {
-        $response = $this->client->get('http://localhost:8000/api/users/' . $this->getLastId() . '?access_token='.$this->token);
-        $this->assertEquals($response->getStatusCode(), 200);
+        $response = $this->client->request('GET', 'http://localhost:8000/api/users/' . $this->getLastId() . '?access_token='.$this->getToken());
+        $this->assertEquals($this->client->getResponse()->getStatusCode(), 200);
     }
 
     /**
@@ -50,8 +53,8 @@ class ApiUserControllerTest extends ApiControllerTest
      */
     public function testGetUsersAction()
     {
-        $response = $this->client->get('http://localhost:8000/api/users?access_token='.$this->token);
-        $this->assertEquals($response->getStatusCode(), 200);
+        $this->client->request('GET', 'http://localhost:8000/api/users?access_token='.$this->getToken());
+        $this->assertEquals($this->client->getResponse()->getStatusCode(), 200);
     }
 
     /**
@@ -59,24 +62,19 @@ class ApiUserControllerTest extends ApiControllerTest
      */
     public function testPutUserAction()
     {
-        $response = $this->client->get('http://localhost:8000/api/users/' . $this->getLastId() . '?access_token='.$this->token);
-        $user_before = json_decode($response->getBody()->getContents());
+        $this->client->request('GET', 'http://localhost:8000/api/users/' . $this->getLastId() . '?access_token='.$this->getToken());
+        $user_before = json_decode($this->client->getResponse()->getContent());
 
-        $data = [
-            'username' => 'new username_' . rand(0, 100),
-            'email' => 'newPuttest' . rand(0, 100) . '@gmail.com',
-            'plainPassword' => [
-                'first' => '111',
-                'second' => '111'
-            ],
-        ];
 
-        $responsePut = $this->client->put('http://localhost:8000/api/users/' . $this->getLastId() . '?access_token='.$this->token, [
-            'body' => json_encode($data)
-        ]);
 
-        $response = $this->client->get('http://localhost:8000/api/users/' . $this->getLastId() . '?access_token='.$this->token);
-        $user_after = json_decode($response->getBody()->getContents());
+        $this->client->request('PUT', 'http://localhost:8000/api/users/' . $this->getLastId() . '?access_token='.$this->getToken(),[],[],
+            ['CONTENT_TYPE' => 'application/json'],
+            '{"username": "user PUT","email": "testput@gmail.com", "plainPassword": {"first": "111", "second": "111"}}');
+
+        $responsePut = $this->client->getResponse();
+
+        $this->client->request('GET', 'http://localhost:8000/api/users/' . $this->getLastId() . '?access_token='.$this->getToken());
+        $user_after = json_decode($this->client->getResponse()->getContent());
 
         $this->assertEquals(204, $responsePut->getStatusCode());
         $this->assertNotEquals($user_before->username, $user_after->username);
@@ -87,32 +85,31 @@ class ApiUserControllerTest extends ApiControllerTest
      */
     public function testPatchUserAction()
     {
-        $response = $this->client->get('http://localhost:8000/api/users/' . $this->getLastId() . '?access_token='.$this->token);
-        $user_before = json_decode($response->getBody()->getContents());
+        $this->client->request('GET', 'http://localhost:8000/api/users/' . $this->getLastId() . '?access_token='.$this->getToken());
+        $user_before = json_decode($this->client->getResponse()->getContent());
 
-        $data = [
-            'username' => 'new username_' . rand(0, 100),
-            'plainPassword' => [
-                'first' => '111',
-                'second' => '111'
-            ],
-        ];
 
-        $responsePut = $this->client->patch('http://localhost:8000/api/users/' . $this->getLastId() . '?access_token='.$this->token, [
-            'body' => json_encode($data)
-        ]);
 
-        $response = $this->client->get('http://localhost:8000/api/users/' . $this->getLastId() . '?access_token='.$this->token);
-        $user_after = json_decode($response->getBody()->getContents());
+        $this->client->request('PATCH', 'http://localhost:8000/api/users/' . $this->getLastId() . '?access_token='.$this->getToken(),[],[],
+            ['CONTENT_TYPE' => 'application/json'],
+            '{"username": "user PATCH", "plainPassword": {"first": "111", "second": "111"}}');
+
+        $responsePut = $this->client->getResponse();
+
+        $this->client->request('GET', 'http://localhost:8000/api/users/' . $this->getLastId() . '?access_token='.$this->getToken());
+        $user_after = json_decode($this->client->getResponse()->getContent());
 
         $this->assertEquals(204, $responsePut->getStatusCode());
         $this->assertNotEquals($user_before->username, $user_after->username);
     }
 
+    /**
+     * @group api
+     */
     public function testDeleteUserAction()
     {
-//        $response = $this->client->delete('http://localhost:8000/api/user/' . $this->getLastId() . '?access_token='.$this->token);
-//
-//        $this->assertEquals(204, $response->getStatusCode());
+        $this->client->request('DELETE', 'http://localhost:8000/api/users/' . $this->getLastId() . '?access_token='.$this->getToken());
+
+        $this->assertEquals(204, $this->client->getResponse()->getStatusCode());
     }
 }
