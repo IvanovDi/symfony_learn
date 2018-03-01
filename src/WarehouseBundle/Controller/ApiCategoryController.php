@@ -48,7 +48,6 @@ class ApiCategoryController extends FOSRestController
 
         $data = json_decode($request->getContent(), true);
 
-        file_put_contents('/home/mark-55/Documents/file.txt', print_r($data, true));
         $form->submit($data);
 
         $validator = $this->get('validator');

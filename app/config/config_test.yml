@@ -22,3 +22,5 @@ doctrine:
         dbname: testdb
         user: root
         password: root
+
+liip_functional_test : ~

@@ -102,7 +102,6 @@ class ApiUserController extends FOSRestController
 
         return new Response(null, 204);
     }
-    //todo проверить как обновляются данные
     protected function processForm(Request $request, FormInterface $form, User $user)
     {
         $data = json_decode($request->getContent(), true);

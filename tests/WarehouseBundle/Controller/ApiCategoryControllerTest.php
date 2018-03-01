@@ -1,15 +1,21 @@
 <?php
 
-namespace Test\WarehouseBundle\Controller;
+namespace tests\WarehouseBundle\Controller;
 
-use tests\WarehouseBundle\Controller\ApiControllerTest;
 
 class ApiCategoryControllerTest extends ApiControllerTest
 {
 
+
+    protected function getToken()
+    {
+        $this->client->request('GET', 'http://127.0.0.1:8000/oauth/v2/token?client_id=1_4eyp1k2a6gw0kc4ocgwc4s00kgwkk0kw0oco4ggokswg0o4cco&client_secret=4v3bk52yaqyokskckk0sgwogwkwc8o4csgoc0occcwgkowgsgo&grant_type=password&username=dima&password=111');
+        return json_decode($this->client->getResponse()->getContent())->access_token;
+    }
+
     protected function getLastId()
     {
-        $this->client->request('GET', 'http://localhost:8000/api/categories?access_token='.$this->token);
+        $this->client->request('GET', 'http://localhost:8000/api/categories?access_token='.$this->getToken());
         $catgories = json_decode($this->client->getResponse()->getContent());
         return $catgories[0]->id;
     }
@@ -20,14 +26,18 @@ class ApiCategoryControllerTest extends ApiControllerTest
     public function testPostCategoryAction()
     {
 
-        $data = [
+        $this->loadFixtures([
+            'tests\WarehouseBundle\DataFixtures\AuthFixtures',
+            'tests\WarehouseBundle\DataFixtures\WarehouseFixtures'
+        ]);
 
-        ];
 
         $this->client->request('POST',
-            'http://localhost:8000/api/categories?access_token='.$this->token,[],[],
+            'http://localhost:8000/api/categories?access_token='.$this->getToken(),[],[],
             ['CONTENT_TYPE' => 'application/json'],
             '{"title": "title test","description": "test description"}');
+
+        file_put_contents('/home/dima/Documents/file1.txt', print_r($this->client->getResponse()->getContent(), true));
 
         $this->assertEquals(201, $this->client->getResponse()->getStatusCode());
 
@@ -38,7 +48,14 @@ class ApiCategoryControllerTest extends ApiControllerTest
      */
     public function testGetCategoriesAction()
     {
-        $this->client->request('GET', 'http://localhost:8000/api/categories?access_token='.$this->token);
+
+        $this->loadFixtures([
+            'tests\WarehouseBundle\DataFixtures\AuthFixtures',
+            'tests\WarehouseBundle\DataFixtures\WarehouseFixtures'
+        ]);
+
+        $this->client->request('GET', 'http://localhost:8000/api/categories?access_token='.$this->getToken());
+
         $this->assertEquals($this->client->getResponse()->getStatusCode(), 200);
     }
 
@@ -47,62 +64,66 @@ class ApiCategoryControllerTest extends ApiControllerTest
      */
     public function testGetCategoryAction()
     {
-        $this->client->request('GET', 'http://localhost:8000/api/categories/'. $this->getLastId() .'?access_token='.$this->token);
+        $this->loadFixtures([
+            'tests\WarehouseBundle\DataFixtures\AuthFixtures',
+            'tests\WarehouseBundle\DataFixtures\WarehouseFixtures'
+        ]);
+
+        $this->client->request('GET', 'http://localhost:8000/api/categories/'. $this->getLastId() .'?access_token='.$this->getToken());
         $this->assertEquals($this->client->getResponse()->getStatusCode(), 200);
     }
-    //todo переписать все тесты api и загружать фикстуры для каждого теста отдельно
-//
-//    /**
-//     * @group api
-//     */
-//    public function testPutCategoryAction()
-//    {
-//        $response = $this->client->get('http://localhost:8000/api/categories/'. $this->getLastId() .'?access_token='.$this->token);
-//        $category_before = json_decode($response->getBody()->getContents());
-//
-//        $data = [
-//            'title' => 'test title_' . rand(0, 100),
-//            'description' => 'test description_' . rand(0, 100),
-//        ];
-//
-//        $responsePut = $this->client->put('http://localhost:8000/api/categories/'. $this->getLastId() .'?access_token='.$this->token, [
-//            'body' => json_encode($data)
-//        ]);
-//
-//        $response = $this->client->get('http://localhost:8000/api/categories/'. $this->getLastId() .'?access_token='.$this->token);
-//        $category_after = json_decode($response->getBody()->getContents());
-//
-//        $this->assertEquals(204, $responsePut->getStatusCode());
-//        $this->assertNotEquals($category_before->title, $category_after->title);
-//    }
-//
-//    /**
-//     * @group api
-//     */
-//    public function testPatchCategoryAction()
-//    {
-//        $response = $this->client->get('http://localhost:8000/api/categories/'. $this->getLastId() .'?access_token='.$this->token);
-//        $category_before = json_decode($response->getBody()->getContents());
-//
-//        $data = [
-//            'description' => 'test description_' . rand(0, 100)
-//        ];
-//
-//        $responsePatch = $this->client->patch('http://localhost:8000/api/categories/'. $this->getLastId() .'?access_token='.$this->token, [
-//            'body' => json_encode($data)
-//        ]);
-//
-//        $response = $this->client->get('http://localhost:8000/api/categories/'. $this->getLastId() .'?access_token='.$this->token);
-//        $category_after = json_decode($response->getBody()->getContents());
-//
-//        $this->assertEquals(204, $responsePatch->getStatusCode());
-//        $this->assertNotEquals($category_before->description, $category_after->description);
-//    }
-//
-//    public function testDeleteCategoryAction()
-//    {
-////        $response = $this->client->delete('http://localhost:8000/api/category/'. $this->getLastId() .'?access_token='.$this->token);
-////
-////        $this->assertEquals(204, $response->getStatusCode());
-//    }
+
+    /**
+     * @group api
+     */
+    public function testPutCategoryAction()
+    {
+        $this->client->request('GET', 'http://localhost:8000/api/categories/'. $this->getLastId() .'?access_token='.$this->getToken());
+        $category_before = json_decode($this->client->getResponse()->getContent());
+
+        $this->client->request('PUT', 'http://localhost:8000/api/categories/'. $this->getLastId() .'?access_token='.$this->getToken(), [], [],
+            ['CONTENT_TYPE' => 'application/json'],
+            '{"title": "PUT title","description": "PUT description"}');
+
+        $responsePut = $this->client->getResponse();
+
+        $this->client->request('GET', 'http://localhost:8000/api/categories/'. $this->getLastId() .'?access_token='.$this->getToken());
+        $category_after = json_decode($this->client->getResponse()->getContent());
+
+        $this->assertEquals(204, $responsePut->getStatusCode());
+        $this->assertNotEquals($category_before->title, $category_after->title);
+    }
+
+    /**
+     * @group api
+     */
+    public function testPatchCategoryAction()
+    {
+        $this->client->request('GET', 'http://localhost:8000/api/categories/'. $this->getLastId() .'?access_token='.$this->getToken());
+        $category_before = json_decode($this->client->getResponse()->getContent());
+
+        $this->client->request('PATCH', 'http://localhost:8000/api/categories/'. $this->getLastId() .'?access_token='.$this->getToken(), [], [],
+            ['CONTENT_TYPE' => 'application/json'],
+            '{"description": "PATCH description"}');
+
+        $responsePut = $this->client->getResponse();
+
+        $this->client->request('GET', 'http://localhost:8000/api/categories/'. $this->getLastId() .'?access_token='.$this->getToken());
+        $category_after = json_decode($this->client->getResponse()->getContent());
+
+        $this->assertEquals(204, $responsePut->getStatusCode());
+        $this->assertNotEquals($category_before->description, $category_after->description);
+    }
+
+    public function testDeleteCategoryAction()
+    {
+        $this->loadFixtures([
+            'tests\WarehouseBundle\DataFixtures\AuthFixtures',
+            'tests\WarehouseBundle\DataFixtures\WarehouseFixtures'
+        ]);
+
+        $this->client->request('DELETE', 'http://localhost:8000/api/categories/'. $this->getLastId() .'?access_token='.$this->getToken());
+
+        $this->assertEquals(204, $this->client->getResponse()->getStatusCode());
+    }
 }
