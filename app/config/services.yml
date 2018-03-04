@@ -37,4 +37,8 @@ services:
 
         public: false
 
+    soap.product.service:
+        class: WarehouseBundle\Services\SoapProductService
+        arguments: []
+
 

@@ -1,0 +1,77 @@
+<definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+             xmlns:tns="http://symfony.loc/"
+             xmlns:xs="http://www.w3.org/2001/XMLSchema"
+             xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+             xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+             name="Soap"
+             xmlns="http://schemas.xmlsoap.org/wsdl/">
+    <types>
+        <xs:schema elementFormDefault="qualified"
+                   xmlns:tns="http://schemas.xmlsoap.org/wsdl/"
+                   xmlns:xs="http://www.w3.org/2001/XMLSchema/"
+                   targetNamespace="http://symfony.loc/app_dev.php/soap/">
+            <xs:complexType name="Product">
+                <xs:sequence>
+                    <xs:element name="title" type="xs:string" />
+                    <xs:element name="description" type="xs:string" />
+                    <xs:element name="model" type="xs:string" />
+                    <xs:element name="category" type="xs:int" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="Request">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Product" type="Product" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="Response">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="status" type="xs:boolean" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+    </types>
+
+    <!-- Сообщения процедуры sendSms -->
+    <message name="crateProductRequest">
+        <part name="Request" element="tns:Request" />
+    </message>
+    <message name="crateProductResponse">
+        <part name="Response" element="tns:Response" />
+    </message>
+
+    <!-- Привязка процедуры к сообщениям -->
+    <portType name="SoapServicePortType">
+        <operation name="crateProduct">
+            <input message="tns:crateProductRequest" />
+            <output message="tns:crateProductResponse" />
+        </operation>
+    </portType>
+
+    <!-- Формат процедур веб-сервиса -->
+    <binding name="SoapServiceBinding" type="tns:SoapServicePortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+        <operation name="crateProduct">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
+    </binding>
+
+    <!-- Определение сервиса -->
+    <service name="SoapService">
+        <port name="SoapServicePort" binding="tns:SoapServiceBinding">
+            <soap:address location="http://symfony.loc/app_dev.php/soap" />
+        </port>
+    </service>
+</definitions>
