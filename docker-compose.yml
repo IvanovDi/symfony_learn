@@ -3,7 +3,7 @@ services:
     db:
       image: mysql
       ports:
-          - "127.0.0.1:3306:3307"
+          - "127.0.0.1:3306:3306"
       volumes:
           - "./.data/db:/var/lib/mysql"
       environment:

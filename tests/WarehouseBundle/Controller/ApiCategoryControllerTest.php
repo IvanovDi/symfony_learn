@@ -37,7 +37,6 @@ class ApiCategoryControllerTest extends ApiControllerTest
             ['CONTENT_TYPE' => 'application/json'],
             '{"title": "title test","description": "test description"}');
 
-        file_put_contents('/home/dima/Documents/file1.txt', print_r($this->client->getResponse()->getContent(), true));
 
         $this->assertEquals(201, $this->client->getResponse()->getStatusCode());
 

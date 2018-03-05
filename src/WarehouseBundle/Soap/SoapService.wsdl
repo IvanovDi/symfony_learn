@@ -1,77 +1,137 @@
-<definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-             xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
-             xmlns:tns="http://symfony.loc/"
-             xmlns:xs="http://www.w3.org/2001/XMLSchema"
-             xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
-             xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
-             name="Soap"
-             xmlns="http://schemas.xmlsoap.org/wsdl/">
-    <types>
-        <xs:schema elementFormDefault="qualified"
-                   xmlns:tns="http://schemas.xmlsoap.org/wsdl/"
-                   xmlns:xs="http://www.w3.org/2001/XMLSchema/"
-                   targetNamespace="http://symfony.loc/app_dev.php/soap/">
-            <xs:complexType name="Product">
-                <xs:sequence>
-                    <xs:element name="title" type="xs:string" />
-                    <xs:element name="description" type="xs:string" />
-                    <xs:element name="model" type="xs:string" />
-                    <xs:element name="category" type="xs:int" />
-                </xs:sequence>
-            </xs:complexType>
-            <xs:element name="Request">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="Product" type="Product" />
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="Response">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="status" type="xs:boolean" />
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-        </xs:schema>
-    </types>
+<definitions name="ProductService"
+             targetNamespace="http://symfony.local/soap?SoapService.wsdl"
+             xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:tns="http://example/soap/stackoverflower.wsdl"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
-    <!-- Сообщения процедуры sendSms -->
-    <message name="crateProductRequest">
-        <part name="Request" element="tns:Request" />
-    </message>
-    <message name="crateProductResponse">
-        <part name="Response" element="tns:Response" />
+    <message name="NewRequest">
+        <part name="name" type="xsd:string"/>
     </message>
 
-    <!-- Привязка процедуры к сообщениям -->
-    <portType name="SoapServicePortType">
-        <operation name="crateProduct">
-            <input message="tns:crateProductRequest" />
-            <output message="tns:crateProductResponse" />
+    <message name="NewResponse">
+        <part name="status" type="xsd:string"/>
+    </message>
+
+    <message name="getListRequest"></message>
+
+    <message name="getListResponse">
+        <part name="list" type="xsd:string"/>
+    </message>
+
+    <message name="editRequest">
+        <part name="id" type="xsd:string"/>
+        <part name="name" type="xsd:string"/>
+    </message>
+
+    <message name="editResponse">
+        <part name="status" type="xsd:string"/>
+    </message>
+
+    <message name="deleteRequest">
+        <part name="id" type="xsd:string"/>
+    </message>
+
+    <message name="deleteResponse">
+        <part name="status" type="xsd:string"/>
+    </message>
+
+    <portType name="ProductService_PortType">
+        <operation name="newStack">
+            <input message="tns:NewRequest"/>
+            <output message="tns:NewResponse"/>
+        </operation>
+        <operation name="getList">
+            <input message="tns:getListRequest"/>
+            <output message="tns:getListResponse"/>
+        </operation>
+        <operation name="edit">
+            <input message="tns:editRequest"/>
+            <output message="tns:editResponse"/>
+        </operation>
+        <operation name="delete">
+            <input message="tns:deleteRequest"/>
+            <output message="tns:deleteResponse"/>
         </operation>
     </portType>
 
-    <!-- Формат процедур веб-сервиса -->
-    <binding name="SoapServiceBinding" type="tns:SoapServicePortType">
-        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
-        <operation name="crateProduct">
-            <soap:operation soapAction="" />
+    <binding name="ProductServiceBinding" type="tns:ProductService_PortType">
+        <soap:binding style="rpc"
+                      transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="newStack">
+            <soap:operation soapAction="newStack"/>
             <input>
-                <soap:body use="literal" />
+                <soap:body
+                        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                        namespace="urn:example:new"
+                        use="encoded"/>
             </input>
+
             <output>
-                <soap:body use="literal" />
+                <soap:body
+                        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                        namespace="urn:example:new"
+                        use="encoded"/>
+            </output>
+        </operation>
+
+        <operation name="getList">
+            <soap:operation soapAction="getList"/>
+            <input>
+                <soap:body
+                        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                        namespace="urn:example:get-list"
+                        use="encoded"/>
+            </input>
+
+            <output>
+                <soap:body
+                        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                        namespace="urn:example:get-list"
+                        use="encoded"/>
+            </output>
+        </operation>
+
+        <operation name="edit">
+            <soap:operation soapAction="edit"/>
+            <input>
+                <soap:body
+                        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                        namespace="urn:example:edit"
+                        use="encoded"/>
+            </input>
+
+            <output>
+                <soap:body
+                        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                        namespace="urn:example:edit"
+                        use="encoded"/>
+            </output>
+        </operation>
+
+        <operation name="delete">
+            <soap:operation soapAction="delete"/>
+            <input>
+                <soap:body
+                        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                        namespace="urn:example:delete"
+                        use="encoded"/>
+            </input>
+
+            <output>
+                <soap:body
+                        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                        namespace="urn:example:delete"
+                        use="encoded"/>
             </output>
         </operation>
     </binding>
 
-    <!-- Определение сервиса -->
-    <service name="SoapService">
-        <port name="SoapServicePort" binding="tns:SoapServiceBinding">
-            <soap:address location="http://symfony.loc/app_dev.php/soap" />
+    <service name="StackOverFlower_Service">
+        <documentation>Description File of StackOverFlowerService</documentation>
+        <port binding="tns:ProductServiceBinding" name="ProductServicePort">
+            <soap:address
+                    location="http://symfony.local/soap" />
         </port>
     </service>
 </definitions>
