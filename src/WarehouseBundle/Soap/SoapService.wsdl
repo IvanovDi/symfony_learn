@@ -1,15 +1,15 @@
 <definitions name="ProductService"
-             targetNamespace="http://symfony.local/soap?SoapService.wsdl"
+             targetNamespace="http://symfony.local/soap"
              xmlns="http://schemas.xmlsoap.org/wsdl/"
              xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-             xmlns:tns="http://example/soap/stackoverflower.wsdl"
+             xmlns:tns="http://symfony.local/soap/stackoverflower.wsdl"
              xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
-    <message name="NewRequest">
+    <message name="createProductRequest">
         <part name="name" type="xsd:string"/>
     </message>
 
-    <message name="NewResponse">
+    <message name="createProductResponse">
         <part name="status" type="xsd:string"/>
     </message>
 
@@ -37,7 +37,7 @@
     </message>
 
     <portType name="ProductService_PortType">
-        <operation name="newStack">
+        <operation name="createProduct">
             <input message="tns:NewRequest"/>
             <output message="tns:NewResponse"/>
         </operation>
@@ -58,19 +58,19 @@
     <binding name="ProductServiceBinding" type="tns:ProductService_PortType">
         <soap:binding style="rpc"
                       transport="http://schemas.xmlsoap.org/soap/http"/>
-        <operation name="newStack">
-            <soap:operation soapAction="newStack"/>
+        <operation name="createProduct">
+            <soap:operation soapAction="createProduct"/>
             <input>
                 <soap:body
                         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                        namespace="urn:example:new"
+                        namespace="urn:symfony.local:new"
                         use="encoded"/>
             </input>
 
             <output>
                 <soap:body
                         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                        namespace="urn:example:new"
+                        namespace="urn:symfony.local:new"
                         use="encoded"/>
             </output>
         </operation>
@@ -80,14 +80,14 @@
             <input>
                 <soap:body
                         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                        namespace="urn:example:get-list"
+                        namespace="urn:symfony.local:get-list"
                         use="encoded"/>
             </input>
 
             <output>
                 <soap:body
                         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                        namespace="urn:example:get-list"
+                        namespace="urn:symfony.local:get-list"
                         use="encoded"/>
             </output>
         </operation>
@@ -97,14 +97,14 @@
             <input>
                 <soap:body
                         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                        namespace="urn:example:edit"
+                        namespace="urn:symfony.local:edit"
                         use="encoded"/>
             </input>
 
             <output>
                 <soap:body
                         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                        namespace="urn:example:edit"
+                        namespace="urn:symfony.local:edit"
                         use="encoded"/>
             </output>
         </operation>
@@ -114,20 +114,20 @@
             <input>
                 <soap:body
                         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                        namespace="urn:example:delete"
+                        namespace="urn:symfony.local:delete"
                         use="encoded"/>
             </input>
 
             <output>
                 <soap:body
                         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                        namespace="urn:example:delete"
+                        namespace="urn:symfony.local:delete"
                         use="encoded"/>
             </output>
         </operation>
     </binding>
 
-    <service name="StackOverFlower_Service">
+    <service name="ProductService">
         <documentation>Description File of StackOverFlowerService</documentation>
         <port binding="tns:ProductServiceBinding" name="ProductServicePort">
             <soap:address

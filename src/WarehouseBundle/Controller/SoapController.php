@@ -11,11 +11,11 @@ class SoapController extends Controller
 {
     public function indexAction(Request $request)
     {
-        $soapServer = new \SoapServer( '../Soap/SoapServer.wsdl');
+        $soapServer = new \SoapServer(__DIR__ . '/../Soap/SoapService.wsdl', ['trace' => true, 'cache_wsdl' => WSDL_CACHE_MEMORY]);
 
         $soapServer->setObject($this->get('soap.product.service'));
 
-//        file_put_contents('/home/mark-55/Documents/file.txt', print_r(__DIR__ . '/../Soap/SoapServer.wsdl', true));
+
         $response = new Response();
         $response->headers->set('Content-Type', 'text/xml; charset=ISO-8859-1');
 
