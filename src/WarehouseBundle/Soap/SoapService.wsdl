@@ -1,137 +1,98 @@
-<definitions name="ProductService"
-             targetNamespace="http://symfony.local/soap"
-             xmlns="http://schemas.xmlsoap.org/wsdl/"
-             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-             xmlns:tns="http://symfony.local/soap/stackoverflower.wsdl"
-             xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+             xmlns:tns="http://symfony.local/"
+             xmlns:xs="http://www.w3.org/2001/XMLSchema"
+             xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+             xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+             name="SoapWsdl"
+             xmlns="http://schemas.xmlsoap.org/wsdl/">
+    <types>
+        <xs:schema elementFormDefault="qualified"
+                   xmlns:tns="http://schemas.xmlsoap.org/wsdl/"
+                   xmlns:xs="http://www.w3.org/2001/XMLSchema/"
+                   targetNamespace="http://symfony.local/">
+            <xs:complexType name="Product">
+                <xs:sequence>
+                    <xs:element name="id" type="xs:int" />
+                    <xs:element name="title" type="xs:string" />
+                    <xs:element name="description" type="xs:string" />
+                    <xs:element name="model" type="xs:string" />
+                    <xs:element name="category" type="xs:int" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="Request">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Product" type="Product" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="Response">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="status" type="xs:boolean" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+    </types>
 
+    <!-- Сообщения процедуры sendSms -->
     <message name="createProductRequest">
-        <part name="name" type="xsd:string"/>
+        <part name="Request" element="tns:Request" />
     </message>
-
     <message name="createProductResponse">
-        <part name="status" type="xsd:string"/>
+        <part name="Response" element="tns:Response" />
     </message>
 
-    <message name="getListRequest"></message>
-
-    <message name="getListResponse">
-        <part name="list" type="xsd:string"/>
+    <message name="updateProductRequest">
+        <part name="Request" element="tns:Request" />
+    </message>
+    <message name="updateProductResponse">
+        <part name="Response" element="tns:Response" />
     </message>
 
-    <message name="editRequest">
-        <part name="id" type="xsd:string"/>
-        <part name="name" type="xsd:string"/>
-    </message>
-
-    <message name="editResponse">
-        <part name="status" type="xsd:string"/>
-    </message>
-
-    <message name="deleteRequest">
-        <part name="id" type="xsd:string"/>
-    </message>
-
-    <message name="deleteResponse">
-        <part name="status" type="xsd:string"/>
-    </message>
-
-    <portType name="ProductService_PortType">
+    <!-- Привязка процедуры к сообщениям -->
+    <portType name="SoapServicePortType">
         <operation name="createProduct">
-            <input message="tns:NewRequest"/>
-            <output message="tns:NewResponse"/>
+            <input message="tns:createProductRequest" />
+            <output message="tns:createProductResponse" />
         </operation>
-        <operation name="getList">
-            <input message="tns:getListRequest"/>
-            <output message="tns:getListResponse"/>
-        </operation>
-        <operation name="edit">
-            <input message="tns:editRequest"/>
-            <output message="tns:editResponse"/>
-        </operation>
-        <operation name="delete">
-            <input message="tns:deleteRequest"/>
-            <output message="tns:deleteResponse"/>
+        <operation name="updateProduct">
+            <input message="tns:updateProductRequest" />
+            <output message="tns:updateProductResponse" />
         </operation>
     </portType>
 
-    <binding name="ProductServiceBinding" type="tns:ProductService_PortType">
-        <soap:binding style="rpc"
-                      transport="http://schemas.xmlsoap.org/soap/http"/>
+    <!-- Формат процедур веб-сервиса -->
+    <binding name="SoapServiceBinding" type="tns:SoapServicePortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
         <operation name="createProduct">
-            <soap:operation soapAction="createProduct"/>
+            <soap:operation soapAction="urn:createProductAction" />
             <input>
-                <soap:body
-                        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                        namespace="urn:symfony.local:new"
-                        use="encoded"/>
+                <soap:body use="literal" />
             </input>
-
             <output>
-                <soap:body
-                        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                        namespace="urn:symfony.local:new"
-                        use="encoded"/>
+                <soap:body use="literal" />
             </output>
         </operation>
-
-        <operation name="getList">
-            <soap:operation soapAction="getList"/>
+        <operation name="updateProduct">
+            <soap:operation soapAction="urn:updateProductAction" />
             <input>
-                <soap:body
-                        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                        namespace="urn:symfony.local:get-list"
-                        use="encoded"/>
+                <soap:body use="literal" />
             </input>
-
             <output>
-                <soap:body
-                        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                        namespace="urn:symfony.local:get-list"
-                        use="encoded"/>
-            </output>
-        </operation>
-
-        <operation name="edit">
-            <soap:operation soapAction="edit"/>
-            <input>
-                <soap:body
-                        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                        namespace="urn:symfony.local:edit"
-                        use="encoded"/>
-            </input>
-
-            <output>
-                <soap:body
-                        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                        namespace="urn:symfony.local:edit"
-                        use="encoded"/>
-            </output>
-        </operation>
-
-        <operation name="delete">
-            <soap:operation soapAction="delete"/>
-            <input>
-                <soap:body
-                        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                        namespace="urn:symfony.local:delete"
-                        use="encoded"/>
-            </input>
-
-            <output>
-                <soap:body
-                        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                        namespace="urn:symfony.local:delete"
-                        use="encoded"/>
+                <soap:body use="literal" />
             </output>
         </operation>
     </binding>
 
-    <service name="ProductService">
-        <documentation>Description File of StackOverFlowerService</documentation>
-        <port binding="tns:ProductServiceBinding" name="ProductServicePort">
-            <soap:address
-                    location="http://symfony.local/soap" />
+    <!-- Определение сервиса -->
+    <service name="SoapService">
+        <port name="SoapServicePort" binding="tns:SoapServiceBinding">
+            <soap:address location="http://symfony.local/soap" />
         </port>
     </service>
 </definitions>

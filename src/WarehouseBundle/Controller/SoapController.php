@@ -9,18 +9,20 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SoapController extends Controller
 {
-    public function indexAction(Request $request)
+    public function indexAction()
     {
-        $soapServer = new \SoapServer(__DIR__ . '/../Soap/SoapService.wsdl', ['trace' => true, 'cache_wsdl' => WSDL_CACHE_MEMORY]);
+        ini_set("soap.wsdl_cache_enabled", "0");
 
-        $soapServer->setObject($this->get('soap.product.service'));
+        $soapServer = new \SoapServer(__DIR__ . '/../Soap/SoapService.wsdl', [ 'trace' => true, 'cache_wsdl' => WSDL_CACHE_NONE ]);
+
+        $soapServer->setObject($this->get('soap.service'));
 
 
         $response = new Response();
         $response->headers->set('Content-Type', 'text/xml; charset=ISO-8859-1');
 
         ob_start();
-        $soapServer->handle($request);
+        $soapServer->handle();
         $response->setContent(ob_get_clean());
 
         return $response;
