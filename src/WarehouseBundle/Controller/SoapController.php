@@ -11,7 +11,7 @@ class SoapController extends Controller
 {
     public function indexAction()
     {
-        ini_set("soap.wsdl_cache_enabled", "0");
+//        ini_set("soap.wsdl_cache_enabled", "0");
 
         $soapServer = new \SoapServer(__DIR__ . '/../Soap/SoapService.wsdl', [ 'trace' => true, 'cache_wsdl' => WSDL_CACHE_NONE ]);
 

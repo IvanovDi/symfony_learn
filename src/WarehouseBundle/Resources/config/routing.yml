@@ -59,7 +59,7 @@ delete_product:
     path: /product/delete/{product}
     defaults: { _controller: WarehouseBundle:Product:delete }
 
-soap_product:
+soap:
     path: /soap
     defaults: { _controller: WarehouseBundle:Soap:index }
 

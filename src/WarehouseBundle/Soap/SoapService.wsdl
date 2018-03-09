@@ -22,6 +22,7 @@
                     <xs:element name="category" type="xs:int" />
                 </xs:sequence>
             </xs:complexType>
+
             <xs:element name="Request">
                 <xs:complexType>
                     <xs:sequence>
@@ -36,26 +37,95 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+
+
+            <xs:complexType name="Category">
+                <xs:sequence>
+                    <xs:element name="id" type="xs:int" />
+                    <xs:element name="title" type="xs:string" />
+                    <xs:element name="description" type="xs:string" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="RequestCategory">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Category" type="Category" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="ResponseCategory">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="status" type="xs:boolean" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
         </xs:schema>
     </types>
 
     <!-- Сообщения процедуры sendSms -->
     <message name="createProductRequest">
-        <part name="Request" element="tns:Request" />
+        <part name="createProductRequest" element="tns:Request" />
     </message>
     <message name="createProductResponse">
-        <part name="Response" element="tns:Response" />
+        <part name="createProductResponse" element="tns:Response" />
     </message>
 
     <message name="updateProductRequest">
-        <part name="Request" element="tns:Request" />
+        <part name="updateProductRequest" element="tns:Request" />
     </message>
     <message name="updateProductResponse">
-        <part name="Response" element="tns:Response" />
+        <part name="updateProductResponse" element="tns:Response" />
+    </message>
+
+    <message name="listProductRequest">
+        <part name="listProductRequest" element="tns:Request" />
+    </message>
+    <message name="listProductResponse">
+        <part name="listProductResponse" element="tns:Response" />
+    </message>
+
+    <message name="deleteProductRequest">
+        <part name="deleteProductRequest" element="tns:id" />
+    </message>
+    <message name="deleteProductResponse">
+        <part name="deleteProductResponse" element="tns:Response" />
+    </message>
+
+
+
+
+
+    <message name="createCategoryRequest">
+        <part name="createCategoryRequest" element="tns:RequestCategory" />
+    </message>
+    <message name="createCategoryResponse">
+        <part name="createCategoryResponse" element="tns:ResponseCategory" />
+    </message>
+
+    <message name="updateCategoryRequest">
+        <part name="updateCategoryRequest" element="tns:RequestCategory" />
+    </message>
+    <message name="updateCategoryResponse">
+        <part name="updateCategoryResponse" element="tns:ResponseCategory" />
+    </message>
+
+    <message name="listCategoriesRequest">
+        <part name="listCategoriesRequest" element="tns:RequestCategory" />
+    </message>
+    <message name="listCategoriesResponse">
+        <part name="listCategoriesResponse" element="tns:ResponseCategory" />
+    </message>
+
+    <message name="deleteCategoryRequest">
+        <part name="deleteCategoryRequest" element="tns:RequestCategory" />
+    </message>
+    <message name="deleteCategoryResponse">
+        <part name="deleteCategoryResponse" element="tns:ResponseCategory" />
     </message>
 
     <!-- Привязка процедуры к сообщениям -->
-    <portType name="SoapServicePortType">
+    <portType name="soapServicePortType">
         <operation name="createProduct">
             <input message="tns:createProductRequest" />
             <output message="tns:createProductResponse" />
@@ -64,13 +134,39 @@
             <input message="tns:updateProductRequest" />
             <output message="tns:updateProductResponse" />
         </operation>
+        <operation name="listProduct">
+            <input message="tns:listProductRequest" />
+            <output message="tns:listProductResponse" />
+        </operation>
+        <operation name="deleteProduct">
+            <input message="tns:deleteProductRequest" />
+            <output message="tns:deleteProductResponse" />
+        </operation>
+
+
+        <operation name="createCategory">
+            <input message="tns:createCategoryRequest" />
+            <output message="tns:createCategoryResponse" />
+        </operation>
+        <operation name="updateCategory">
+            <input message="tns:updateCategoryRequest" />
+            <output message="tns:updateCategoryResponse" />
+        </operation>
+        <operation name="listCategories">
+            <input message="tns:listCategoriesRequest" />
+            <output message="tns:listCategoriesResponse" />
+        </operation>
+        <operation name="deleteCategory">
+            <input message="tns:deleteCategoryRequest" />
+            <output message="tns:deleteCategoryResponse" />
+        </operation>
     </portType>
 
     <!-- Формат процедур веб-сервиса -->
-    <binding name="SoapServiceBinding" type="tns:SoapServicePortType">
+    <binding name="SoapServiceBinding" type="tns:soapServicePortType">
         <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
         <operation name="createProduct">
-            <soap:operation soapAction="urn:createProductAction" />
+            <soap:operation soapAction="urn:createProduct" />
             <input>
                 <soap:body use="literal" />
             </input>
@@ -79,7 +175,63 @@
             </output>
         </operation>
         <operation name="updateProduct">
-            <soap:operation soapAction="urn:updateProductAction" />
+            <soap:operation soapAction="urn:updateProduct" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
+        <operation name="listProduct">
+            <soap:operation soapAction="urn:listProduct" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
+        <operation name="deleteProduct">
+            <soap:operation soapAction="urn:deleteProduct" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
+
+
+        <operation name="createCategory">
+            <soap:operation soapAction="urn:createCategory" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
+        <operation name="updateCategory">
+            <soap:operation soapAction="urn:updateCategory" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
+        <operation name="listCategories">
+            <soap:operation soapAction="urn:listCategories" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
+        <operation name="deleteCategory">
+            <soap:operation soapAction="urn:deleteCategory" />
             <input>
                 <soap:body use="literal" />
             </input>
